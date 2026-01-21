@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Учёт времени — HR (прототип)</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app">
+    <aside class="side">
+      <div class="brand">Учёт времени</div>
+      <div class="pill">HR • администрирование</div>
+
+      <div class="nav" id="nav">
+        <div class="nav-group" data-group="team">
+          <div class="group">Команда</div>
+          <div class="items">
+            <button type="button" data-view="team-contacts">Контакты <span></span></button>
+          </div>
+        </div>
+
+        <div class="nav-group" data-group="time">
+          <div class="group">Учёт времени</div>
+          <div class="items">
+            <button type="button" data-view="calendar">Календарь <span>⌘1</span></button>
+            <button type="button" data-view="table" class="active">Таблица <span>⌘2</span></button>
+            <button type="button" data-view="analytics">Аналитика <span>⌘3</span></button>
+            <button type="button" data-view="deviations">Отклонения по периодам <span></span></button>
+          </div>
+        </div>
+
+        <div class="nav-group" data-group="people">
+          <div class="group">Сотрудники</div>
+          <div class="items">
+            <button type="button" data-view="employees">Условия <span></span></button>
+          </div>
+        </div>
+
+        <div class="nav-group" data-group="settings">
+          <div class="group">Настройки</div>
+          <div class="items">
+            <button type="button" data-view="settings-statuses">Статусы <span></span></button>
+            <button type="button" data-view="settings-colors">Цвет в таблице <span></span></button>
+            <button type="button" data-view="settings-highlight">Условия для подсветки <span></span></button>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="top">
+        <div class="title">
+          <b id="viewTitle">Таблица</b>
+          <div class="sub" id="viewHint">Инициализация…</div>
+        </div>
+
+        <div class="controls">
+          <button type="button" id="toggleWorkTime" class="btn" style="display:none;">Рабочее время</button>
+          <button type="button" id="toggleHighlight" class="btn" style="display:none;">Подсветка</button>
+
+          <div class="seg" id="modeSeg" aria-label="Режим данных">
+            <button type="button" data-mode="mix" class="active">План/факт</button>
+            <button type="button" data-mode="fact">Факт</button>
+            <button type="button" data-mode="plan">План</button>
+            <button type="button" data-mode="dev">Отклонение</button>
+          </div>
+
+          <div class="seg" id="empViewSeg" aria-label="Вид списка сотрудников" style="display:none;">
+            <button type="button" data-empview="cards" class="active">Карточки</button>
+            <button type="button" data-empview="table">Таблица</button>
+          </div>
+
+          <button class="btn" id="prevBtn" type="button">←</button>
+          <div class="btn ghost" id="periodLabel">—</div>
+          <button class="btn" id="nextBtn" type="button">→</button>
+
+          <div class="ms" id="empMS">
+            <button class="ms-btn" type="button" id="empMSBtn" aria-haspopup="listbox" aria-expanded="false">Все</button>
+            <div class="ms-pop" id="empMSPop" role="listbox" aria-multiselectable="true"></div>
+          </div>
+
+          <button type="button" id="toggleChrono" class="btn" title="Хронология">Хронология ↓</button>
+
+          <select class="select" id="periodSelect">
+            <option value="month">Месяц</option>
+            <option value="week">Неделя</option>
+          </select>
+        </div>
+      </header>
+
+      <section class="content" id="content"><div class="pill">Инициализация…</div></section>
+    </main>
+  </div>
+
+  <div class="err" id="errBox">Ошибка выполнения<code id="errText"></code></div>
+
+  <div class="modal" id="empModal" hidden>
+    <div class="modal-backdrop" data-close="1"></div>
+    <div class="modal-card" role="dialog" aria-modal="true">
+      <h3 id="modalTitle" class="modal-title">Карточка сотрудника</h3>
+      <div class="form">
+        <div class="section-row">Основное</div>
+
+        <label>Имя фамилия</label>
+        <div class="row">
+          <input id="mFirst" placeholder="Имя" />
+          <input id="mLast" placeholder="Фамилия" />
+        </div>
+
+        <label>Должность</label>
+        <div class="row">
+          <input id="mRole" placeholder="Должность" style="min-width:320px;" />
+        </div>
+
+        <div class="section-row">Условия работы</div>
+
+        <label>Дни работы</label>
+        <div class="days-pick" id="mDays"></div>
+
+        <label>Время</label>
+        <div class="row">
+          <span>с</span><input id="mFrom" placeholder="hh:mm" style="min-width:120px;" />
+          <span>до</span><input id="mTo" placeholder="hh:mm" style="min-width:120px;" />
+          <span>часов в день</span><input id="mHours" placeholder="hh:mm" style="min-width:120px;" />
+        </div>
+
+        <div class="section-row">Дополнительные свойства</div>
+
+        <label>Проект</label>
+        <div class="row">
+          <select id="mProject"></select>
+        </div>
+
+        <label>Отдел</label>
+        <div class="row">
+          <select id="mDept"></select>
+        </div>
+
+        <label>Статус</label>
+        <div class="row">
+          <select id="mStatus"></select>
+        </div>
+
+        <label>Занятость</label>
+        <div class="row">
+          <select id="mEmployment"></select>
+        </div>
+
+        <label>Взаимодействие</label>
+        <div class="row">
+          <select id="mInteraction"></select>
+        </div>
+
+        <label>Формат работы</label>
+        <div class="row">
+          <select id="mWorkFormat"></select>
+        </div>
+
+        <label>Тип выплат</label>
+        <div class="row">
+          <select id="mPayoutType"></select>
+        </div>
+
+        <label>Частота выплат</label>
+        <div class="row">
+          <select id="mPayoutFreq"></select>
+        </div>
+
+        <label>Город</label>
+        <div class="row">
+          <select id="mCity"></select>
+        </div>
+
+        <label>Часовой пояс</label>
+        <div class="row">
+          <select id="mTz"></select>
+        </div>
+
+        <div class="section-row">Контакты</div>
+
+        <label>Почта</label>
+        <div class="row">
+          <select id="mEmail"></select>
+        </div>
+
+        <label>Значение почты</label>
+        <div class="row">
+          <input id="mEmailMeaning" placeholder="—" style="min-width:320px;" />
+        </div>
+
+        <label>Телефон</label>
+        <div class="row">
+          <input id="mPhone" placeholder="+7 …" style="min-width:320px;" />
+        </div>
+
+        <label>Соцсети</label>
+        <div class="days-pick" id="mSocials"></div>
+
+        <div class="section-row">Статус в команде</div>
+
+        <label>В команде</label>
+        <div class="row">
+          <button class="btn" type="button" id="mInTeamYes">да</button>
+          <button class="btn" type="button" id="mInTeamNo">нет</button>
+        </div>
+
+        <label>Дата найма</label>
+        <div class="row">
+          <input id="mHireDate" placeholder="dd.mm.yyyy" style="min-width:160px;" />
+        </div>
+
+        <div class="section-row">Связь</div>
+
+        <label>Telegram</label>
+        <div class="row">
+          <input id="mTg" placeholder="username" style="min-width:320px;" />
+        </div>
+
+        <label>Связь с Tg</label>
+        <div class="row">
+          <button class="btn" type="button" id="mLinkYes">да</button>
+          <button class="btn" type="button" id="mLinkNo">нет</button>
+        </div>
+      </div>
+      <div class="actions">
+        <button class="btn" type="button" id="mSave">Сохранить</button>
+        <button class="btn" type="button" id="mCancel">Отмена</button>
+      </div>
+    </div>
+  </div>
+  <script type="module" src="scripts/app.js"></script>
+</body>
+</html>
