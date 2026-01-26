@@ -62,6 +62,10 @@
     .nav-group .items{ display:flex; flex-direction:column; }
     .nav-group .items button + button{ margin-top:var(--m-4); }
 
+    button {
+      text-align: left;
+    }
+    
     .nav button{
       width:100%; padding:12px 14px; border:1px solid var(--br); border-radius:14px; background:#fff;
       cursor:pointer; font-weight:900; font-size:var(--f-item); display:flex; align-items:center; justify-content:space-between;
@@ -210,9 +214,55 @@
     .err code{ display:block; margin-top:6px; white-space:pre-wrap; font-size:12px; color:#b91c1c; }
 
     .modal[hidden]{ display:none; }
-    .modal{ position:fixed; inset:0; z-index:90; }
-    .modal-backdrop{ position:absolute; inset:0; background:rgba(0,0,0,.18); }
-    .modal-card{ position:relative; width:min(900px, calc(100vw - 40px)); margin:70px auto; background:#fff; border:1px solid rgba(0,0,0,.12); border-radius:20px; box-shadow:var(--shadow); padding:18px; }
+    /* Модалка: если контента больше чем экран — включаем скролл */
+    .modal{
+      position:fixed;
+      inset:0;
+      z-index:90;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:20px;
+    }
+
+    .modal-backdrop{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.18);
+}
+.modal-card{
+  position:relative;
+  width:min(900px, calc(100vw - 40px));
+  max-height:calc(100vh - 40px);
+
+  background:#fff;
+  border:1px solid rgba(0,0,0,.12);
+  box-shadow:var(--shadow);
+
+  border-radius:24px;
+  overflow:hidden;
+
+  display:flex;
+  flex-direction:column;
+
+  padding-right: 10px;
+}
+
+.modal-body{
+  overflow:auto;
+  padding:24px;
+  flex:1 1 auto;
+}
+
+    /* .actions{
+      position:sticky;
+      bottom:0;
+      background:#fff;
+      padding-top:14px;
+      margin-top:14px;
+      border-top:1px solid rgba(0,0,0,.08);
+    } */
+
     .modal-card h3{ margin:0 0 16px; font-size:24px; font-weight:800; letter-spacing:.2px; }
     .form{ display:grid; grid-template-columns:180px 1fr; gap:10px 12px; align-items:center; }
     .form label{ font-weight:900; color:var(--fg); }

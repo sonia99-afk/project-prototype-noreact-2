@@ -148,8 +148,11 @@ function saveState() {
     var mHireDate = $('mHireDate');
     var mLinkYes = $('mLinkYes');
     var mLinkNo = $('mLinkNo');
-    var mSave = $('mSave');
-    var mCancel = $('mCancel');
+
+    // Для раздела "Карточка сотрудника"
+    var mSave = $('mSave'); //переменная к кнопке "сохранить" 
+    var mDelet = $('mDelet'); //переменная к кнопке "удалить" 
+    var mCancel = $('mCancel'); //переменная к кнопке "отмена" 
 
     var mProject = $('mProject');
     var mDept = $('mDept');
@@ -1255,30 +1258,42 @@ function saveState() {
       mInTeamNo.classList.toggle('active', !yes);
     }
 
-    function buildSocialButtons(){
-      var html = [];
-      for (var i=0;i<OPT.socials.length;i++){
-        html.push('<button type="button" class="daybtn" data-social="' + OPT.socials[i] + '">' + OPT.socials[i] + '</button>');
-      }
-      mSocials.innerHTML = html.join('');
-    }
+    // Кнопки дней/соцсетей теперь лежат в HTML (index.html),
+    // поэтому не генерируем их через JS. Здесь оставляем только синхронизацию состояний.
+    function setButtonsOn(container, attrName, values){
+      if (!container) return;
 
-    function buildDayButtons(){
-      var all = ['Пн','Вт','Ср','Чт','Пт','Сб','Вс'];
-      var html = [];
-      for (var i=0;i<all.length;i++) html.push('<button type="button" class="daybtn" data-day="' + all[i] + '">' + all[i] + '</button>');
-      mDays.innerHTML = html.join('');
+      // сбросить
+      var all = container.querySelectorAll('.daybtn');
+      for (var i=0;i<all.length;i++) all[i].classList.remove('on');
+
+      if (!values || !values.length) return;
+
+      // выставить
+      for (var j=0;j<values.length;j++){
+        var v = values[j];
+        var btn = container.querySelector('.daybtn[' + attrName + '="' + v + '"]');
+        if (btn) btn.classList.add('on');
+      }
     }
 
     function openModal(empId){
       editingId = empId;
-      buildDayButtons();
-      buildSocialButtons();
+
+      // Кнопка «Удалить» нужна только при редактировании существующего сотрудника
+      if (mDelet) mDelet.style.display = (empId === '__new') ? 'none' : '';
+
+      // Модалка полностью в HTML — здесь только сбрасываем/проставляем выбранные значения
+      setButtonsOn(mDays, 'data-day', []);
+      setButtonsOn(mSocials, 'data-social', []);
 
       var emp = null;
       for (var i=0;i<employees.length;i++) if (employees[i].id===empId) emp = employees[i];
 
       if (!emp){
+        // Fallback: прячем кнопку, если сотрудник не найден
+        if (mDelet) mDelet.style.display = 'none';
+
         mFirst.value=''; mLast.value=''; mRole.value='';
         mFrom.value=''; mTo.value=''; mHours.value=''; mTg.value='';
         setLinkButtons(true);
@@ -1313,7 +1328,10 @@ function saveState() {
       mProject.value = emp.meta.project || 'DP';
       mDept.value = emp.meta.department || 'Управление';
       mStatus.value = emp.meta.status || 'В штате';
-      mStatus2.value = emp.meta.status2 || 'Активен';
+
+      // дни/соцсети
+      setButtonsOn(mDays, 'data-day', emp.days || []);
+      setButtonsOn(mSocials, 'data-social', (emp.meta && emp.meta.socials) ? emp.meta.socials : []);
       mEmployment.value = emp.meta.employment || 'Фултайм';
       mInteraction.value = emp.meta.interaction || 'Инхаус';
       mWorkFormat.value = emp.meta.workFormat || 'Удалёнка';
@@ -1321,10 +1339,6 @@ function saveState() {
       mPayoutFreq.value = emp.meta.payoutFreq || 'Два раза в месяц';
       mCity.value = emp.meta.city || 'Москва';
       mTz.value = emp.meta.tz || 'МСК';
-
-      var set = new Set(emp.days || []);
-      var btns = mDays.querySelectorAll('.daybtn');
-      for (var b=0;b<btns.length;b++) btns[b].classList.toggle('on', set.has(btns[b].dataset.day));
 
       empModal.hidden = false;
     }
@@ -1540,6 +1554,66 @@ function saveState() {
       });
 
       mCancel.addEventListener('click', closeModal);
+
+      // Работаем с кнопкой "Удалить", только если она существует в DOM
+      if (mDelet){
+
+        // Вешаем обработчик клика на кнопку удаления
+        mDelet.addEventListener('click', function(){
+
+          // Защита: удалять можно только существующего сотрудника
+          // (не удаляем при создании нового или если id отсутствует)
+          if (!editingId || editingId === '__new') return;
+
+          // Сохраняем id текущего редактируемого сотрудника
+          var empId = editingId;
+
+          // Ищем сотрудника в массиве employees по id
+          // Нужно, чтобы показать его имя в confirm
+          var emp = null;
+          for (var i=0;i<employees.length;i++)
+            if (employees[i].id === empId) emp = employees[i];
+
+          // Берём имя сотрудника для текста подтверждения
+          // Если вдруг не найден — показываем id
+          var name = emp ? emp.name : empId;
+
+          // Показываем confirm и прерываем выполнение,
+          // если пользователь нажал "Отмена"
+          if (!confirm('Удалить сотрудника «' + name + '»?')) return;
+
+          // 1) Удаляем сотрудника из основного массива employees
+          // Идём с конца, чтобы безопасно удалять элементы
+          for (var j=employees.length-1; j>=0; j--){
+            if (employees[j].id === empId) employees.splice(j, 1);
+          }
+
+          // 2) Удаляем сотрудника из выбранных в мультиселекте,
+          // если сейчас выбран не режим "Все"
+          if (!allSelected){
+            selectedEmpIds.delete(empId);
+
+            // Если после удаления список выбранных пуст —
+            // автоматически возвращаем режим "Все"
+            if (selectedEmpIds.size === 0) allSelected = true;
+          }
+
+          // 3) Сбрасываем кэш план/факт,
+          // так как он рассчитывается на основе employees
+          state.plan = Object.create(null);
+          state.fact = Object.create(null);
+
+          // Закрываем модальное окно
+          closeModal();
+
+          // Перерисовываем список сотрудников
+          renderEmployeeMS();
+
+          // Полная перерисовка интерфейса (таблица / календарь / итоги)
+          render();
+        });
+      }
+
 
       mDays.addEventListener('click', function(e){
         var b = e.target.closest('.daybtn');
