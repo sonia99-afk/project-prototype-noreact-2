@@ -73,9 +73,11 @@
             <button type="button" data-empview="table">Таблица</button>
           </div>
 
-          <button class="btn" id="prevBtn" type="button">←</button>
+          
+          <button class="btn" id="prevBtn" type="button">◀</button>
+          <button class="btn" id="todayBtn" type="button">Сегодня</button>
           <div class="btn ghost" id="periodLabel">—</div>
-          <button class="btn" id="nextBtn" type="button">→</button>
+          <button class="btn" id="nextBtn" type="button">▶</button>
 
           <div class="ms" id="empMS">
             <button class="ms-btn" type="button" id="empMSBtn" aria-haspopup="listbox" aria-expanded="false">Все</button>
@@ -247,6 +249,109 @@
     </div>
     </div>
   </div>
+
+
+
+  <!-- Производственный календарь (встраиваемый экран; состояние только в памяти) -->
+  <template id="tpl-prodcalendar-view">
+    <div class="prodcal">
+      <div class="prodcal__topbar">
+        
+        <!-- <div class="prodcal__controls">
+          <button class="btn icon" type="button" data-pc-prev aria-label="Предыдущий месяц">◀</button>
+          <button class="btn" type="button" data-pc-today>Сегодня</button>
+          <button class="btn icon" type="button" data-pc-next aria-label="Следующий месяц">▶</button>
+        </div> -->
+      </div>
+
+      <div class="prodcal__layout">
+        <div class="card prodcal__calendarCard" data-pc-calendarCard>
+          <div class="prodcal__calendarHeader">
+            <div class="prodcal__monthLabel" data-pc-monthLabel>—</div>
+          </div>
+
+          <div class="prodcal__dow">
+            <div>Пн</div><div>Вт</div><div>Ср</div><div>Чт</div><div>Пт</div><div>Сб</div><div>Вс</div>
+          </div>
+
+          <div class="prodcal__grid" data-pc-grid></div>
+        </div>
+
+        <!-- Templates (локальные для экрана) -->
+        <template data-pc-tpl="day">
+          <button type="button" class="prodcal__day">
+            <div class="prodcal__dayNumber"></div>
+            <div class="prodcal__dayLabels"></div>
+          </button>
+        </template>
+
+        <template data-pc-tpl="label">
+          <span class="prodcal__label"></span>
+        </template>
+
+        <template data-pc-tpl="event-item">
+          <label class="prodcal__eventItem">
+            <div class="prodcal__eventItemLeft">
+              <input type="checkbox" />
+              <span class="prodcal__label prodcal__eventChip"></span>
+            </div>
+          </label>
+        </template>
+
+        <template data-pc-tpl="event-type">
+          <div class="prodcal__eventType">
+            <div class="prodcal__eventTypeLeft">
+              <span class="prodcal__dot"></span>
+              <strong></strong>
+            </div>
+            <input type="color" />
+          </div>
+        </template>
+
+        <aside class="prodcal__side" data-pc-sidebar>
+          <div class="prodcal__panel">
+            <div class="prodcal__panelCard">
+              <div class="prodcal__cardDate" data-pc-selectedDate>Выберите дату</div>
+              <h3 class="prodcal__sectionTitle">Статус дня и события</h3>
+
+              <div class="prodcal__statusRow">
+                <button type="button" class="btn" data-pc-status="working">Рабочий</button>
+                <button type="button" class="btn" data-pc-status="holiday">Выходной</button>
+              </div>
+
+              <div class="prodcal__eventList" data-pc-eventList></div>
+              <p class="prodcal__muted">Статус и события задаются для выбранной даты.</p>
+            </div>
+
+            <div class="prodcal__panelCard">
+              <h3 class="prodcal__sectionTitle">Управление событиями</h3>
+
+              <form data-pc-eventForm class="prodcal__eventForm">
+                <div class="prodcal__eventFormRow">
+                  <label>
+                    Название
+                    <input type="text" name="title" placeholder="Корпоратив" required />
+                  </label>
+                  <label>
+                    Цвет
+                    <input type="color" name="color" value="#6c7bff" />
+                  </label>
+                </div>
+                <button type="submit">Добавить событие</button>
+              </form>
+
+              <div class="prodcal__spacer"></div>
+              <div class="prodcal__eventTypes" data-pc-eventTypes></div>
+              <div class="prodcal__hint">Здесь меняется только цвет события. Удаление событий в этом прототипе не включено.</div>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </template>
+
+  <!-- Модуль сотрудники -->
+   
   <script type="module" src="scripts/app.js"></script>
 </body>
 </html>

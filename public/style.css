@@ -226,33 +226,34 @@
     }
 
     .modal-backdrop{
-  position:fixed;
-  inset:0;
-  background:rgba(0,0,0,.18);
-}
-.modal-card{
-  position:relative;
-  width:min(900px, calc(100vw - 40px));
-  max-height:calc(100vh - 40px);
+      position:fixed;
+      inset:0;
+      background:rgba(0,0,0,.18);
+    }
 
-  background:#fff;
-  border:1px solid rgba(0,0,0,.12);
-  box-shadow:var(--shadow);
+    .modal-card{
+      position:relative;
+      width:min(900px, calc(100vw - 40px));
+      max-height:calc(100vh - 40px);
 
-  border-radius:24px;
-  overflow:hidden;
+      background:#fff;
+      border:1px solid rgba(0,0,0,.12);
+      box-shadow:var(--shadow);
 
-  display:flex;
-  flex-direction:column;
+      border-radius:24px;
+      overflow:hidden;
 
-  padding-right: 10px;
-}
+      display:flex;
+      flex-direction:column;
 
-.modal-body{
-  overflow:auto;
-  padding:24px;
-  flex:1 1 auto;
-}
+      padding-right: 10px;
+    }
+
+    .modal-body{
+      overflow:auto;
+      padding:24px;
+      flex:1 1 auto;
+    }
 
     /* .actions{
       position:sticky;
@@ -271,6 +272,7 @@
       height:30px; padding:0 10px; border:1px solid var(--br); border-radius:8px; font-weight:600; background:#fff; min-width:160px;
       font-family:inherit; color:var(--fg);
     }
+
     .days-pick{ display:flex; gap:6px; flex-wrap:wrap; }
     .daybtn{ height:28px; padding:0 10px; border-radius:8px; border:1px solid var(--br); background:#fff; font-weight:900; cursor:pointer; }
     .daybtn.on{ background:rgba(22,163,74,.14); border-color:rgba(22,163,74,.35); }
@@ -284,6 +286,7 @@
       font-weight:900;
       letter-spacing:.2px;
     }
+    
     .actions{ margin-top:14px; display:flex; justify-content:flex-end; gap:10px; }
 
     @media (max-width: 900px){
@@ -297,3 +300,151 @@
       .section-row{ margin-top:0; }
       .emp-table .row{ min-width:1400px; }
     }
+
+/* ============================
+   Производственный календарь (скоуп: .prodcal)
+   состояние только в памяти (без localStorage)
+   ============================ */
+
+.prodcal{ max-width:1180px; }
+
+.prodcal__topbar{ display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:14px; }
+.prodcal__title{ display:flex; align-items:baseline; gap:10px; min-width:0; }
+.prodcal__subtitle{ font-size:12px; color:var(--mut); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; font-weight:800; }
+
+.prodcal__layout{ display:grid; grid-template-columns:1fr 360px; gap:14px; align-items:start; }
+
+.prodcal__calendarCard{ padding:16px; }
+.prodcal__calendarHeader{ display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:10px; }
+.prodcal__monthLabel{ font-size:16px; font-weight:900; letter-spacing:-.02em; text-transform:capitalize; }
+
+.prodcal__controls{ display:flex; gap:8px; align-items:center; }
+
+.prodcal__dow{ display:grid; grid-template-columns:repeat(7,1fr); gap:8px; margin-top:10px; margin-bottom:8px; }
+.prodcal__dow div{ font-size:11px; color:var(--mut); font-weight:900; text-transform:uppercase; letter-spacing:.08em; padding:0 2px; }
+
+.prodcal__grid{ display:grid; grid-template-columns:repeat(7,1fr); gap:8px; }
+
+.prodcal__day{
+  appearance:none;
+  border:1px solid var(--br);
+  background:#fff;
+  border-radius:16px;
+  min-height:86px;
+  padding:14px;
+  text-align:left;
+  cursor:pointer;
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+  transition:transform .08s ease, box-shadow .12s ease, border-color .12s ease;
+  overflow:hidden;
+}
+.prodcal__day:hover{ box-shadow:var(--shadow); }
+.prodcal__day:active{ transform:translateY(1px); }
+
+.prodcal__dayNumber{ font-weight:900; letter-spacing:-.02em; font-size:14px; }
+.prodcal__dayLabels{ display:flex; flex-wrap:wrap; gap:6px; align-items:flex-start; }
+
+.prodcal__label{
+  display:inline-flex;
+  align-items:center;
+  border-radius:999px;
+  padding:4px 8px;
+  font-size:11px;
+  font-weight:900;
+  color:white;
+  line-height:1;
+  max-width:100%;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+.prodcal__day.is-working{ background:linear-gradient(180deg, #ffffff 0%, #e8f7ee 100%); border-color:#cbeed8; }
+.prodcal__day.is-holiday{ background:linear-gradient(180deg, #ffffff 0%, #ffecec 100%); border-color:#ffd0d0; }
+.prodcal__day.is-outside{ opacity:.45; }
+.prodcal__day.is-selected{ outline:3px solid rgba(10,132,255,.35); border-color:rgba(10,132,255,.55); box-shadow:0 18px 44px rgba(10,132,255,.20); }
+
+.prodcal__side{ padding:0; position:sticky; top:14px; }
+.prodcal__panel{ display:flex; flex-direction:column; gap:12px; padding:0; }
+.prodcal__panelCard{ padding:20px; border-radius:20px; overflow:visible; background:#fff; border:1px solid var(--br); box-shadow:none; }
+
+.prodcal__sectionTitle{
+  margin:0 0 10px 0;
+  font-size:13px;
+  font-weight:900;
+  letter-spacing:.02em;
+  text-transform:uppercase;
+  color:var(--fg);
+}
+
+.prodcal__cardDate{ font-size:12px; color:var(--mut); font-weight:900; margin:0 0 10px 0; text-transform:capitalize; }
+
+.prodcal__statusRow{ display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:12px; }
+.prodcal__statusRow .btn{ justify-content:center; }
+.prodcal__statusRow .btn.active{ border-color:rgba(10,132,255,.55); background:rgba(10,132,255,.10); color:var(--pri); }
+
+.prodcal__eventList{ display:flex; flex-direction:column; gap:8px; }
+
+.prodcal__dropdown{ border:1px solid var(--br); border-radius:12px; padding:8px 10px; background:var(--bg); position:relative; }
+.prodcal__dropdown.is-disabled{ opacity:.75; }
+.prodcal__dropdownSummary{ cursor:pointer; font-size:13px; font-weight:900; list-style:none; user-select:none; }
+.prodcal__dropdownSummary::-webkit-details-marker{ display:none; }
+
+.prodcal__dropdownList{
+  position:absolute;
+  top:calc(100% + 8px);
+  left:0;
+  right:0;
+  padding:12px;
+  border-radius:12px;
+  border:1px solid var(--br);
+  background:#fff;
+  box-shadow:none;
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+  z-index:20;
+}
+
+.prodcal__eventItem{ display:flex; align-items:center; justify-content:space-between; gap:12px; }
+.prodcal__eventItemLeft{ display:flex; align-items:center; gap:10px; min-width:0; }
+.prodcal__eventItem input[type="checkbox"]{ width:18px; height:18px; accent-color:var(--pri); }
+.prodcal__eventChip{ max-width:100%; min-width:0; }
+
+.prodcal__eventForm{ display:grid; gap:12px; }
+.prodcal__eventFormRow{ display:grid; grid-template-columns:minmax(0,1fr) 90px; gap:12px; align-items:end; }
+.prodcal__eventForm label{ display:grid; gap:6px; font-size:12px; font-weight:900; letter-spacing:.02em; text-transform:uppercase; color:var(--fg); }
+.prodcal__eventForm input[type="text"]{
+  width:100%;
+  height:38px;
+  border-radius:12px;
+  border:1px solid var(--br);
+  padding:0 12px;
+  font-size:14px;
+  outline:none;
+  background:#fff;
+}
+.prodcal__eventForm input[type="text"]:focus{ border-color:rgba(10,132,255,.55); box-shadow:0 0 0 4px rgba(10,132,255,.14); }
+.prodcal__eventForm input[type="color"]{ width:100%; height:38px; border-radius:12px; border:1px solid var(--br); padding:0; background:#fff; cursor:pointer; }
+.prodcal__eventForm button{ border:none; border-radius:12px; height:38px; background:rgba(10,132,255,.12); color:var(--pri); font-weight:900; cursor:pointer; }
+.prodcal__eventForm button:active{ transform:translateY(1px); }
+
+.prodcal__eventTypes{ display:flex; flex-direction:column; gap:8px; }
+.prodcal__eventType{ display:flex; align-items:center; justify-content:space-between; gap:10px; padding:10px 10px; border:1px solid var(--br); border-radius:14px; background:#fff; box-shadow:none; }
+.prodcal__eventTypeLeft{ display:flex; align-items:center; gap:10px; min-width:0; }
+.prodcal__dot{ width:10px; height:10px; border-radius:999px; background:#ddd; box-shadow:none; flex:0 0 auto; }
+.prodcal__eventType strong{ font-size:13px; font-weight:900; letter-spacing:-.01em; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.prodcal__eventType input[type="color"]{ border:none; background:transparent; width:28px; height:20px; padding:0; cursor:pointer; }
+.prodcal__eventType input[type="color"]::-webkit-color-swatch-wrapper{ padding:0; }
+.prodcal__eventType input[type="color"]::-webkit-color-swatch{ border:none; border-radius:999px; }
+
+.prodcal__muted{ font-size:12px; color:var(--mut); margin-top:8px; line-height:1.35; font-weight:800; }
+.prodcal__hint{ font-size:12px; color:var(--mut); margin-top:8px; line-height:1.35; font-weight:800; }
+.prodcal__spacer{ height:12px; }
+
+@media (max-width: 980px){
+  .prodcal__layout{ grid-template-columns:1fr; }
+  .prodcal__side{ position:static; }
+}
