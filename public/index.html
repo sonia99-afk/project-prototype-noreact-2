@@ -23,9 +23,9 @@
         <div class="nav-group" data-group="time">
           <div class="group">Учёт времени</div>
           <div class="items">
-            <button type="button" data-view="calendar">Календарь <span>⌘1</span></button>
-            <button type="button" data-view="table" class="active">Таблица <span>⌘2</span></button>
-            <button type="button" data-view="analytics">Аналитика <span>⌘3</span></button>
+            <button type="button" data-view="calendar"><span class="nav-text">Календарь <span>⌘1</span></span></button>
+            <button type="button" data-view="table" class="active"><span class="nav-text">Таблица <span>⌘2</span></span></button>
+            <button type="button" data-view="analytics"><span class="nav-text">Аналитика <span>⌘3</span></span></button>
             <button type="button" data-view="deviations"><span class="nav-text">Отклонения по периодам</span><span></span></button>
           </div>
         </div>
@@ -33,21 +33,21 @@
         <div class="nav-group" data-group="people">
           <div class="group">Условия</div>
           <div class="items">
-            <button type="button" data-view="employees">Сотрудники <span></span></button>
+            <button type="button" data-view="employees"><span class="nav-text">Сотрудники </span><span></span></button>
             <button type="button" data-view="prodcalendar">
               <span class="nav-text">Производственный календарь</span>
               <span></span>
             </button>
-            <button type="button" data-view="vaccalendar">Календарь отпусков <span></span></button>
+            <button type="button" data-view="vaccalendar"><span class="nav-text">Календарь отпусков </span><span></span></button>
           </div>
         </div>
 
         <div class="nav-group" data-group="settings">
           <div class="group">Настройки</div>
           <div class="items">
-            <button type="button" data-view="settings-statuses">Статусы <span></span></button>
-            <button type="button" data-view="settings-colors">Цвет в таблице <span></span></button>
-            <button type="button" data-view="settings-highlight">Условия для подсветки <span></span></button>
+            <button type="button" data-view="settings-statuses"><span class="nav-text">Статусы <span></span></span></button>
+            <button type="button" data-view="settings-colors"><span class="nav-text">Цвет в таблице <span></span></span></button>
+            <button type="button" data-view="settings-highlight"><span class="nav-text">Условия для подсветки <span></span></span></button>
           </div>
         </div>
       </div>
@@ -320,8 +320,31 @@
     </div>
   </template>
 
+
+
+  <!-- Таблица контактов команды (разметка в HTML, строки добавляет JS) -->
+<template id="tpl-team-contacts-table">
+  <div class="contacts-table" id="teamContactsTable">
+    <div class="row head">
+      <div class="cell">Онлайн</div>
+      <div class="cell">Должность</div>
+      <div class="cell">Имя Фамилия</div>
+      <div class="cell">Телеграм</div>
+      <div class="cell">Почта</div>
+      <div class="cell">Значение почты</div>
+      <div class="cell">Телефон</div>
+      <div class="cell">Соцсети</div>
+      <div class="cell">В команде</div>
+    </div>
+
+    <!-- сюда JS подставит строки -->
+    <div data-team-contacts-body></div>
+  </div>
+</template>
+
+
   
-   
+  <script src="scripts/team-contacts.js"></script>
   <script type="module" src="scripts/app.js"></script>
 </body>
 </html>

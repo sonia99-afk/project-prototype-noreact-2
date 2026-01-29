@@ -1160,6 +1160,34 @@ phone.addEventListener('input', () => {
     
       body.innerHTML = rows.join('');
     }
+
+
+
+
+// ...новый блок контакты в начале страницы
+function renderTeamContacts(){
+  try{
+    if (window.TeamContacts && typeof window.TeamContacts.render === 'function'){
+      window.TeamContacts.render({
+        employees: employees,
+        ensureEmployeeMeta: ensureEmployeeMeta,
+        contentEl: contentEl
+      });
+      return;
+    }
+  }catch(e){
+    showErr(e && e.message ? e.message : e);
+  }
+
+  contentEl.innerHTML =
+    '<div class="card"><h3>Контакты</h3>' +
+    '<div style="font-size:12px;color:var(--mut);line-height:1.6;font-weight:900;">' +
+    'Не найден скрипт контактов (scripts/team-contacts.js).' +
+    '</div></div>';
+}
+
+
+    // ...
     
 
     function renderAnalytics(){
@@ -1807,8 +1835,8 @@ function render(){
 
       if (view === 'team-contacts'){
         viewTitleEl.textContent = 'Команда';
-        viewHintEl.textContent = 'Контакты • пустая страница (ТЗ будет позже)';
-        contentEl.innerHTML = '<div class="card"><h3>Контакты</h3><div style="font-size:12px;color:var(--mut);line-height:1.6;font-weight:900;">Пусто. ТЗ будет позже.</div></div>';
+        viewHintEl.textContent = 'Контакты • таблица';
+        renderTeamContacts();
         return;
       }
 
