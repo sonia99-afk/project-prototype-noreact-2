@@ -475,17 +475,17 @@
   border-radius:14px;
   overflow:auto;
   font-size:13px;
+  width: 980px;
   color:var(--fg);
 }
 
 .contacts-table .row{
   display:grid;
-  grid-template-columns: 90px 160px 220px 160px 200px 180px 160px 160px 110px;
+  grid-template-columns: 45px 65px 130px 55px 170px 105px 100px 110px 60px;
   gap:12px;
   padding:14px 16px;
   align-items:center;
   border-bottom:1px solid var(--br);
-  min-width: 1400px;
 }
 
 .contacts-table .row:last-child{ border-bottom:0; }
