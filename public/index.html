@@ -108,9 +108,10 @@
     <div class="modal-card" role="dialog" aria-modal="true">
       <div class="modal-body">
         <h3 id="modalTitle" class="modal-title">Карточка сотрудника</h3>
+        
         <div class="form">
           <div class="section-row">Основное</div>
-
+          
           <label>Имя фамилия</label>
           <div class="row">
             <input id="mFirst" placeholder="Имя" />
@@ -134,6 +135,7 @@
             <button type="button" class="daybtn" data-day="Сб">Сб</button>
             <button type="button" class="daybtn" data-day="Вс">Вс</button>
           </div>
+          
 
           <label>Время</label>
           <div class="row">
@@ -141,6 +143,7 @@
             <span>до</span><input id="mTo" placeholder="hh:mm" style="min-width:120px;" type="time"/> 
             <span>часов в день</span><input id="mHours" placeholder="hh:mm" style="min-width:120px;" />
           </div>
+          
 
           <div class="section-row">Контакты</div>
 
@@ -148,11 +151,11 @@
           <div class="row">
             <select id="mEmail"></select>
           </div>
-
-          <label>Значение почты</label>
-          <div class="row">
-            <input id="mEmailMeaning" placeholder="—" style="min-width:320px;" />
-          </div>
+            <label>Значение почты</label>
+            <div class="row">
+              <input id="mEmailMeaning" placeholder="—" style="min-width:320px;" />
+            </div>
+            
 
         <label>Телефон</label>
         <div class="row">
@@ -191,6 +194,16 @@
           <button class="btn" type="button" id="mLinkYes">да</button>
           <button class="btn" type="button" id="mLinkNo">нет</button>
         </div>
+<div style="width: 800px; font-size: 13px; color: gray;";>
+  Имя Фамилия - Два самостоятельных свойства. Для заведения необходимо минимум одно из *Формируют объект “сотрудника” для планов/фактов <br>
+  Дни работы  Отмечаются нажатием (как чек-боксы) на нужные дни *Формируют “План” “Рабочих дней” <br>
+  Время - пишется с и до в формате — тогда “всего фиксируется автоматически // либо пишется время все и тогда в “с / до” автоматически пишется NA - это для тех у кого нет викса со скольки до сткольки но есть фикс полановый общего кол-ва отрабатываемого времени *Формируют “План” “Рабочего времения” в рабочии дни <br>
+  Связь с Tg Юзер нейм текстом, Отображение Связи тумблер: “да” зелёный, “нет” красный <br>
+  Почта: pm.designprosmot@mail.ru, fm.designprosmot@mail.ru, hr.designprosmot@mail.ru Значение почты: pm - prodject menager, fm - финменеджер. *расшишровка первых буквы. Нужно для запоминания почт, что бы по первым буквам быстро находить нужного сотрудника для упоминания в документах залогиненных на рабочие почты <br>
+  Соцсети:Instagram, ВКонтакте. *У кого-то сделать только одну, у кого-то по две. Никнеймы придумай  из водных данных которые у тебя есть по людям. <br>
+  Телефон: Рандомные с 8-000-000-00-00 <br>
+  Дата найма: dd.mm.gg. *Для сотрудников у Мальцева Александра и Виктора Великанова - даты начала с марта 2012. У Александра Семенцова дату с 2013 г., у остальных даты после 2020 г.
+</div>
         </div>
         <div class="actions">
           <button class="btn" type="button" id="mSave">Сохранить</button>

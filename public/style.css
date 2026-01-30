@@ -371,8 +371,8 @@
   text-overflow:ellipsis;
 }
 
-.prodcal__day.is-working{ background:linear-gradient(180deg, #ffffff 0%, var(--dot-work) 100%); border-color: var(--dot-work); }
-.prodcal__day.is-holiday{ background:linear-gradient(180deg, #ffffff 0%, var(--dot-noshow) 100%); border-color: var(--dot-noshow); }
+.prodcal__day.is-working{ background-color:  var(--dot-work); border-color: var(--dot-work); }
+.prodcal__day.is-holiday{ background-color: var(--dot-noshow); border-color: var(--dot-noshow); }
 .prodcal__day.is-outside{ opacity:.45; }
 .prodcal__day.is-selected{ outline:3px solid rgba(10,132,255,.35); border-color:rgba(10,132,255,.55); box-shadow:0 18px 44px rgba(10,132,255,.20); }
 
