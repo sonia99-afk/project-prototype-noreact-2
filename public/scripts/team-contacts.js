@@ -107,7 +107,7 @@
             '<div class="cell subtle">' + esc((e.meta && e.meta.emailMeaning) ? e.meta.emailMeaning : '—') + '</div>' +
             '<div class="cell subtle">' + esc((e.meta && e.meta.phone) ? e.meta.phone : '—') + '</div>' +
             '<div class="cell subtle">' + socialsHtml + '</div>' +
-            '<div class="cell subtle">' + ((e.meta && e.meta.inTeam) ? 'да' : 'нет') + '</div>' +
+            '<div class="cell subtle">' + esc((e.meta && e.meta.hireDate) ? e.meta.hireDate : '—') + '</div>' +
           '</div>'
         );
       }

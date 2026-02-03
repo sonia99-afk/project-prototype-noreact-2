@@ -805,8 +805,15 @@ phone.addEventListener('input', () => {
     }
 
     function setPeriodLabel(){
-      if (periodSelect.value === 'month'){
-        var mr = monthRange(cursor);
+      // Для «Производственного календаря» диапазон в шапке должен соответствовать
+      // его собственному состоянию (prodCalendarState.current), а не общему cursor.
+      // На остальных экранах — как раньше.
+      var baseDate = (view === 'prodcalendar' && prodCalendarState && prodCalendarState.current)
+        ? prodCalendarState.current
+        : cursor;
+
+      if (periodSelect.value === 'month' || view === 'prodcalendar'){
+        var mr = monthRange(baseDate);
         periodLabelEl.textContent = pad2(mr.start.getDate()) + '.' + pad2(mr.start.getMonth()+1) + ' - ' + pad2(mr.end.getDate()) + '.' + pad2(mr.end.getMonth()+1);
       } else {
         var days = getPeriodDays();
@@ -1144,8 +1151,8 @@ phone.addEventListener('input', () => {
             <div class="cell subtle">${e.meta.email || '—'}</div>
             <div class="cell subtle">${e.meta.phone || '—'}</div>
             <div class="cell subtle">${(e.meta.socials||[]).join(', ') || '—'}</div>
-            <div class="cell subtle">${e.meta.inTeam ? 'да' : 'нет'}</div>
             <div class="cell subtle">${e.meta.hireDate || '—'}</div>
+            <div class="cell subtle">${e.meta.inTeam ? 'В штате' : 'Уволен'}</div>
             <div class="cell subtle">${e.meta.emailMeaning || '—'}</div>
           </div>
         `);
@@ -1153,6 +1160,34 @@ phone.addEventListener('input', () => {
     
       body.innerHTML = rows.join('');
     }
+
+
+
+
+// ...новый блок контакты в начале страницы
+function renderTeamContacts(){
+  try{
+    if (window.TeamContacts && typeof window.TeamContacts.render === 'function'){
+      window.TeamContacts.render({
+        employees: employees,
+        ensureEmployeeMeta: ensureEmployeeMeta,
+        contentEl: contentEl
+      });
+      return;
+    }
+  }catch(e){
+    showErr(e && e.message ? e.message : e);
+  }
+
+  contentEl.innerHTML =
+    '<div class="card"><h3>Контакты</h3>' +
+    '<div style="font-size:12px;color:var(--mut);line-height:1.6;font-weight:900;">' +
+    'Не найден скрипт контактов (scripts/team-contacts.js).' +
+    '</div></div>';
+}
+
+
+    // ...
     
 
     function renderAnalytics(){
@@ -1358,8 +1393,14 @@ phone.addEventListener('input', () => {
 
       // init state once per session
       if (!prodCalendarState){
+        // В прототипе у нас есть "TODAY" (фиксированная дата для демо).
+        // Если её нет — используем реальное "сегодня".
+        // var base = (typeof TODAY !== 'undefined') ? TODAY : new Date();
+        var base = new Date();
+
         prodCalendarState = {
-          current: new Date(),
+          // current хранит месяц, который показываем (берём 1-е число месяца)
+          current: new Date(base.getFullYear(), base.getMonth(), 1),
           selected: null,
           overrides: {}, // {'YYYY-MM-DD': {status:null|'working'|'holiday', events:[eventTypeId...]}}
           eventTypes: [
@@ -1675,6 +1716,22 @@ phone.addEventListener('input', () => {
 
 
 function render(){
+      // Для производственного календаря стейт инициализируется лениво внутри renderProdCalendar(),
+      // но шапка (periodLabel) рисуется до него. Чтобы диапазон сразу был корректным,
+      // подстрахуемся и создадим минимальный стейт заранее.
+      if (view === 'prodcalendar' && !prodCalendarState){
+        var base = (typeof TODAY !== 'undefined') ? TODAY : new Date();
+        prodCalendarState = {
+          current: new Date(base.getFullYear(), base.getMonth(), 1),
+          selected: null,
+          overrides: {},
+          eventTypes: [
+            { id: 'corporate', name: 'Корпоратив', color: '#7f6bff' },
+            { id: 'forum', name: 'Форум', color: '#ff8f6b' },
+            { id: 'transfer', name: 'Трансфер', color: '#45b26b' }
+          ]
+        };
+      }
       setChronoBtn();
       setPeriodLabel();
 
@@ -1778,8 +1835,8 @@ function render(){
 
       if (view === 'team-contacts'){
         viewTitleEl.textContent = 'Команда';
-        viewHintEl.textContent = 'Контакты • пустая страница (ТЗ будет позже)';
-        contentEl.innerHTML = '<div class="card"><h3>Контакты</h3><div style="font-size:12px;color:var(--mut);line-height:1.6;font-weight:900;">Пусто. ТЗ будет позже.</div></div>';
+        viewHintEl.textContent = 'Контакты • таблица';
+        renderTeamContacts();
         return;
       }
 
@@ -1820,26 +1877,45 @@ function render(){
         render();
       });
 
-      prevBtn.addEventListener('click', function(){ cursor = new Date(cursor.getFullYear(), cursor.getMonth()-1, 1); render(); });
-      nextBtn.addEventListener('click', function(){ cursor = new Date(cursor.getFullYear(), cursor.getMonth()+1, 1); render(); });
+      // Навигация по периоду в шапке должна управлять активным экраном.
+      // Для «Производственного календаря» используем его локальный стейт,
+      // на остальных экранах — общий cursor.
+      prevBtn.addEventListener('click', function(){
+        if (view === 'prodcalendar' && prodCalendarState){
+          prodCalendarState.current = new Date(prodCalendarState.current.getFullYear(), prodCalendarState.current.getMonth()-1, 1);
+          render();
+          return;
+        }
+        cursor = new Date(cursor.getFullYear(), cursor.getMonth()-1, 1);
+        render();
+      });
+
+      nextBtn.addEventListener('click', function(){
+        if (view === 'prodcalendar' && prodCalendarState){
+          prodCalendarState.current = new Date(prodCalendarState.current.getFullYear(), prodCalendarState.current.getMonth()+1, 1);
+          render();
+          return;
+        }
+        cursor = new Date(cursor.getFullYear(), cursor.getMonth()+1, 1);
+        render();
+      });
 
 
       if (todayBtn){
         todayBtn.addEventListener('click', function(){
-          // ДОБАВЛЕНО: для производственного календаря кнопка «Сегодня» должна управлять им,
-          // а не общим cursor/time-views.
-          // if (typeof view !== 'undefined' && view === 'prodcalendar'
-          //     && typeof renderProdCalendar === 'function'
-          //     && typeof prodCalendarState !== 'undefined' && prodCalendarState){
-          //   prodCalendarState.current = new Date();
-          //   prodCalendarState.selected = new Date();
-          //   renderProdCalendar();
-          //   return;
-          // }
+          // Для «Производственного календаря» кнопка «Сегодня» управляет его локальным стейтом.
+          if (view === 'prodcalendar' && prodCalendarState){
+            // var now = (typeof TODAY !== 'undefined') ? TODAY : new Date();
+            var now = new Date();
+            prodCalendarState.current = new Date(now.getFullYear(), now.getMonth(), 1);
+            prodCalendarState.selected = new Date(now);
+            render();
+            return;
+          }
 
-          // ДОБАВЛЕНО РАНЕЕ: на остальных экранах «Сегодня» сбрасывает cursor на текущий месяц и делает render()
-          var base = (typeof TODAY !== 'undefined') ? TODAY : new Date();
-          // для ваших time-view экранов курсор хранит начало месяца
+          // На остальных экранах «Сегодня» сбрасывает общий cursor на текущий месяц и делает render().
+          // var base = (typeof TODAY !== 'undefined') ? TODAY : new Date();
+          var now = new Date();
           cursor = new Date(base.getFullYear(), base.getMonth(), 1);
           render();
         });

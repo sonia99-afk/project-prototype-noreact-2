@@ -23,9 +23,9 @@
         <div class="nav-group" data-group="time">
           <div class="group">Учёт времени</div>
           <div class="items">
-            <button type="button" data-view="calendar"><span class="nav-text">Календарь <span>⌘1</span></span></button>
-            <button type="button" data-view="table" class="active"><span class="nav-text">Таблица <span>⌘2</span></span></button>
-            <button type="button" data-view="analytics"><span class="nav-text">Аналитика <span>⌘3</span></span></button>
+            <button type="button" data-view="calendar"><span class="nav-text">Календарь</span> <span class="nav-hotkey">⌘1</span></button>
+            <button type="button" data-view="table" class="active"><span class="nav-text">Таблица</span><span class="nav-hotkey">⌘2</span></button>
+            <button type="button" data-view="analytics"><span class="nav-text">Аналитика</span><span class="nav-hotkey">⌘3</span></button>
             <button type="button" data-view="deviations"><span class="nav-text">Отклонения по периодам</span><span></span></button>
           </div>
         </div>
@@ -173,13 +173,13 @@
 
         <label>В команде</label>
         <div class="row">
-          <button class="btn" type="button" id="mInTeamYes">да</button>
-          <button class="btn" type="button" id="mInTeamNo">нет</button>
+          <input id="mHireDate" placeholder="dd.mm.yyyy" style="min-width:160px;" type="date"/>
         </div>
 
-        <label>Дата найма</label>
+        <label>Статус</label>
         <div class="row">
-          <input id="mHireDate" placeholder="dd.mm.yyyy" style="min-width:160px;" type="date"/>
+          <button class="btn" type="button" id="mInTeamYes">В штате</button>
+          <button class="btn" type="button" id="mInTeamNo">Уволен</button>
         </div>
 
         <div class="section-row">Связь</div>
@@ -194,21 +194,27 @@
           <button class="btn" type="button" id="mLinkYes">да</button>
           <button class="btn" type="button" id="mLinkNo">нет</button>
         </div>
-<div style="width: 800px; font-size: 13px; color: gray;";>
-  Имя Фамилия - Два самостоятельных свойства. Для заведения необходимо минимум одно из *Формируют объект “сотрудника” для планов/фактов <br>
-  Дни работы  Отмечаются нажатием (как чек-боксы) на нужные дни *Формируют “План” “Рабочих дней” <br>
-  Время - пишется с и до в формате — тогда “всего фиксируется автоматически // либо пишется время все и тогда в “с / до” автоматически пишется NA - это для тех у кого нет викса со скольки до сткольки но есть фикс полановый общего кол-ва отрабатываемого времени *Формируют “План” “Рабочего времения” в рабочии дни <br>
-  Связь с Tg Юзер нейм текстом, Отображение Связи тумблер: “да” зелёный, “нет” красный <br>
-  Почта: pm.designprosmot@mail.ru, fm.designprosmot@mail.ru, hr.designprosmot@mail.ru Значение почты: pm - prodject menager, fm - финменеджер. *расшишровка первых буквы. Нужно для запоминания почт, что бы по первым буквам быстро находить нужного сотрудника для упоминания в документах залогиненных на рабочие почты <br>
-  Соцсети:Instagram, ВКонтакте. *У кого-то сделать только одну, у кого-то по две. Никнеймы придумай  из водных данных которые у тебя есть по людям. <br>
-  Телефон: Рандомные с 8-000-000-00-00 <br>
-  Дата найма: dd.mm.gg. *Для сотрудников у Мальцева Александра и Виктора Великанова - даты начала с марта 2012. У Александра Семенцова дату с 2013 г., у остальных даты после 2020 г.
-</div>
+
+        <div class="section-row"></div>
+          
         </div>
         <div class="actions">
           <button class="btn" type="button" id="mSave">Сохранить</button>
           <button class="btn" type="button" id="mDelet">Удалить</button>
           <button class="btn" type="button" id="mCancel">Отмена</button>
+      </div>
+      <br><br><br><br>
+      <div class="section-row"></div>
+      <div style="width: 800px; font-size: 13px; color: gray;";>
+        <b>Имя Фамилия</b><br> - Два самостоятельных свойства. Для заведения необходимо минимум одно из <br>*Формируют объект “сотрудника” для планов/фактов <br><br>
+        <b>Дни работы</b><br>  Отмечаются нажатием (как чек-боксы) на нужные дни <br>*Формируют “План” “Рабочих дней” <br><br>
+          <b>Время</b><br> - пишется с и до в формате — тогда “всего фиксируется автоматически // либо пишется время все и тогда в “с / до” автоматически пишется NA - это для тех у кого нет викса со скольки до сткольки но есть фикс полановый общего кол-ва отрабатываемого времени *Формируют “План” “Рабочего времения” в рабочии дни <br><br>
+            <b>Связь с Tg</b><br> Юзер нейм текстом, Отображение Связи тумблер: “да” зелёный, “нет” красный <br><br>
+              <b>Почта:</b><br> pm.designprosmot@mail.ru, fm.designprosmot@mail.ru, hr.designprosmot@mail.ru Значение почты: pm - prodject menager, fm - финменеджер. *расшишровка первых буквы. Нужно для запоминания почт, что бы по первым буквам быстро находить нужного сотрудника для упоминания в документах залогиненных на рабочие почты <br><br>
+                <b>Соцсети:</b><br>Instagram, ВКонтакте. *У кого-то сделать только одну, у кого-то по две. Никнеймы придумай  из водных данных которые у тебя есть по людям. <br><br>
+                  <b>Телефон:</b><br> Рандомные с 8-000-000-00-00 <br><br>
+                    <b>Дата найма:</b><br> dd.mm.gg. *Для сотрудников у Мальцева Александра и Виктора Великанова - даты начала с марта 2012. У Александра Семенцова дату с 2013 г., у остальных даты после 2020 г.<br><br>
+                      <b>Статус</b><br> В штате, Уволен - отвечает за отображениев таблицах, календарях и инфых местах вывода информации о сотрудниках
       </div>
     </div>
     </div>
@@ -229,7 +235,7 @@
       <div class="cell">Телефон</div>
       <div class="cell">Соцсети</div>
       <div class="cell">В команде</div>
-      <div class="cell">Дата найма</div>
+      <div class="cell">Статус</div>
       <div class="cell">Значение почты</div>
     </div>
 
@@ -358,6 +364,7 @@
 
   
   <script src="scripts/team-contacts.js"></script>
+  <script src="scripts/prod-calendar.js"></script>
   <script type="module" src="scripts/app.js"></script>
 </body>
 </html>

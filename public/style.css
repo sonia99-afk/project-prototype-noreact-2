@@ -475,13 +475,13 @@
   border-radius:14px;
   overflow:auto;
   font-size:13px;
-  width: 980px;
+  width: 1050px;
   color:var(--fg);
 }
 
 .contacts-table .row{
   display:grid;
-  grid-template-columns: 45px 65px 130px 55px 170px 105px 100px 110px 60px;
+  grid-template-columns: 45px 65px 130px 55px 170px 105px 110px 160px 70px;
   gap:12px;
   padding:14px 16px;
   align-items:center;
