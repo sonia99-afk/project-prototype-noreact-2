@@ -1,90 +1,85 @@
-const API_BASE_URL = window.location.origin;
+// const API_BASE_URL = window.location.origin;
 
-class TimeTrackingAPI {
-  static async getEmployees() {
-    const response = await fetch(`${API_BASE_URL}/api/employees`);
-    if (!response.ok) throw new Error('Ошибка загрузки сотрудников');
-    return await response.json();
-  }
+// class TimeTrackingAPI {
+//   static async getEmployees() {
+//     const response = await fetch(`${API_BASE_URL}/api/employees`);
+//     if (!response.ok) throw new Error('Ошибка загрузки сотрудников');
+//     return await response.json();
+//   }
 
-  static async saveEmployees(employees) {
-    const response = await fetch(`${API_BASE_URL}/api/employees`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(employees)
-    });
-    if (!response.ok) throw new Error('Ошибка сохранения сотрудников');
-    return await response.json();
-  }
+//   static async saveEmployees(employees) {
+//     const response = await fetch(`${API_BASE_URL}/api/employees`, {
+//       method: 'POST',
+//       headers: { 'Content-Type': 'application/json' },
+//       body: JSON.stringify(employees)
+//     });
+//     if (!response.ok) throw new Error('Ошибка сохранения сотрудников');
+//     return await response.json();
+//   }
 
-  static async getTimeData() {
-    const response = await fetch(`${API_BASE_URL}/api/time-data`);
-    if (!response.ok) throw new Error('Ошибка загрузки данных времени');
-    return await response.json();
-  }
+//   static async getTimeData() {
+//     const response = await fetch(`${API_BASE_URL}/api/time-data`);
+//     if (!response.ok) throw new Error('Ошибка загрузки данных времени');
+//     return await response.json();
+//   }
 
-  static async saveTimeData(timeData) {
-    const response = await fetch(`${API_BASE_URL}/api/time-data`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(timeData)
-    });
-    if (!response.ok) throw new Error('Ошибка сохранения данных времени');
-    return await response.json();
-  }
-}
+//   static async saveTimeData(timeData) {
+//     const response = await fetch(`${API_BASE_URL}/api/time-data`, {
+//       method: 'POST',
+//       headers: { 'Content-Type': 'application/json' },
+//       body: JSON.stringify(timeData)
+//     });
+//     if (!response.ok) throw new Error('Ошибка сохранения данных времени');
+//     return await response.json();
+//   }
+// }
 
-// Замените инициализацию данных в вашем коде:
-async function loadInitialData() {
-  try {
-    // Загружаем данные с сервера
-    employees = await TimeTrackingAPI.getEmployees();
-    const timeData = await TimeTrackingAPI.getTimeData();
+// // Замените инициализацию данных в вашем коде:
+// async function loadInitialData() {
+//   try {
+//     // Загружаем данные с сервера
+//     employees = await TimeTrackingAPI.getEmployees();
+//     const timeData = await TimeTrackingAPI.getTimeData();
     
-    // Инициализируем meta данные для каждого сотрудника
-    for (let e0 = 0; e0 < employees.length; e0++) {
-      ensureEmployeeMeta(employees[e0]);
-    }
+//     // Инициализируем meta данные для каждого сотрудника
+//     for (let e0 = 0; e0 < employees.length; e0++) {
+//       ensureEmployeeMeta(employees[e0]);
+//     }
     
-    // Объединяем с локальными данными
-    state.plan = { ...state.plan, ...timeData.plan };
-    state.fact = { ...state.fact, ...timeData.fact };
+//     // Объединяем с локальными данными
+//     state.plan = { ...state.plan, ...timeData.plan };
+//     state.fact = { ...state.fact, ...timeData.fact };
     
-    // Проверяем наличие данных для текущего месяца
-    ensureMonthData(cursor);
+//     // Проверяем наличие данных для текущего месяца
+//     ensureMonthData(cursor);
     
-    render();
-  } catch (error) {
-    console.error('Ошибка загрузки данных:', error);
-    showErr('Ошибка загрузки данных с сервера');
-  }
-}
+//     render();
+//   } catch (error) {
+//     console.error('Ошибка загрузки данных:', error);
+//     showErr('Ошибка загрузки данных с сервера');
+//   }
+// }
 
-// Обновите функцию сохранения при изменениях
-function saveState() {
-  try {
-    // Сохраняем сотрудников
-    TimeTrackingAPI.saveEmployees(employees);
+// // Обновите функцию сохранения при изменениях
+// function saveState() {
+//   try {
+//     // Сохраняем сотрудников
+//     TimeTrackingAPI.saveEmployees(employees);
     
-    // Сохраняем данные времени
-    TimeTrackingAPI.saveTimeData({
-      plan: state.plan,
-      fact: state.fact
-    });
-  } catch (error) {
-    console.error('Ошибка сохранения:', error);
-    showErr('Ошибка сохранения на сервере');
-  }
-}
+//     // Сохраняем данные времени
+//     TimeTrackingAPI.saveTimeData({
+//       plan: state.plan,
+//       fact: state.fact
+//     });
+//   } catch (error) {
+//     console.error('Ошибка сохранения:', error);
+//     showErr('Ошибка сохранения на сервере');
+//   }
+// }
 
-// Вызывайте saveState() после изменений:
-// - После редактирования сотрудника
-// - После изменения данных времени
-
-
-
-
-
+// // Вызывайте saveState() после изменений:
+// // - После редактирования сотрудника
+// // - После изменения данных времени
 
 
 (function(){
@@ -96,11 +91,6 @@ function saveState() {
       return n;
     }
 
-    // Optional element getter (returns null if not found)
-    function $opt(id){
-      return document.getElementById(id);
-    }
-
     var errBox = document.getElementById('errBox');
     var errText = document.getElementById('errText');
     function showErr(msg){
@@ -108,13 +98,13 @@ function saveState() {
         if (!errBox || !errText) return;
         errText.textContent = String(msg || 'Unknown error');
         errBox.style.display = 'block';
-      }catch(_){ }
+      }catch(_){ }   //тут нет условия
     }
 
     window.addEventListener('error', function(e){
       var stack = '';
       try{ stack = (e && e.error && e.error.stack) ? ('\n' + e.error.stack) : ''; }catch(_){ stack=''; }
-      showErr((e && e.message ? e.message : 'Error') + stack);
+      showErr((e && e.message ? e.message : 'Error') + stack); //опять же переписать
     });
 
     var contentEl = $('content');
@@ -135,101 +125,9 @@ function saveState() {
     var toggleHighlightBtn = $('toggleHighlight');
     var toggleChronoBtn = $('toggleChrono');
 
-    var empModal = $('empModal');
-    var mFirst = $('mFirst');
-    var mLast = $('mLast');
-    var mRole = $('mRole');
-    var mDays = $('mDays');
-    var mFrom = $('mFrom');
-    var mTo = $('mTo');
-    var mHours = $('mHours');
-    var mTg = $('mTg');
-    var mEmail = $('mEmail');
-    var mEmailMeaning = $('mEmailMeaning');
-    var mPhone = $('mPhone');
-    var mSocials = $('mSocials');
-    var mInTeamYes = $('mInTeamYes');
-    var mInTeamNo = $('mInTeamNo');
-    var mHireDate = $('mHireDate');
-    var mLinkYes = $('mLinkYes');
-    var mLinkNo = $('mLinkNo');
-    
-
-    // Для раздела "Карточка сотрудника"
-    var mSave = $('mSave'); //переменная к кнопке "сохранить" 
-    var mDelet = $('mDelet'); //переменная к кнопке "удалить" 
-    var mCancel = $('mCancel'); //переменная к кнопке "отмена" 
+   
 
     function pad2(n){ return String(n).padStart(2,'0'); }
-
-
-    // Функция для расчета времени в модальном окне
-    function parseHM(value) {
-      // value ожидается "HH:MM" (у тебя type="time" именно так и отдаёт)
-      if (!value || typeof value !== 'string') return null;
-      var parts = value.split(':');
-      if (parts.length < 2) return null;
-    
-      var h = Number(parts[0]);
-      var m = Number(parts[1]);
-      if (!Number.isFinite(h) || !Number.isFinite(m)) return null;
-    
-      h = Math.max(0, Math.min(23, h));
-      m = Math.max(0, Math.min(59, m));
-      return h * 60 + m;
-    }
-    
-    function fmtHMFromMinutes(totalMin) {
-      totalMin = Math.max(0, Math.floor(totalMin));
-      var h = Math.floor(totalMin / 60);
-      var m = totalMin % 60;
-      return String(h).padStart(2, '0') + ':' + String(m).padStart(2, '0');
-    }
-    
-    function updateWorkHours() {
-      var fromMin = parseHM(mFrom.value);
-      var toMin = parseHM(mTo.value);
-    
-      // если одно из полей пустое — очищаем "часов в день"
-      if (fromMin == null || toMin == null) {
-        mHours.value = '';
-        return;
-      }
-    
-      // разница (если смена через полночь — учитываем)
-      var diff = toMin - fromMin;
-      if (diff < 0) diff += 24 * 60;
-    
-      mHours.value = fmtHMFromMinutes(diff);
-    }
-    
-    // пересчёт на любое изменение времени
-    mFrom.addEventListener('input', updateWorkHours);
-    mTo.addEventListener('input', updateWorkHours);
-    mFrom.addEventListener('change', updateWorkHours);
-    mTo.addEventListener('change', updateWorkHours);
-
-
-
-    // Номер телефона 
-    const phone = document.getElementById('mPhone');
-
-phone.addEventListener('input', () => {
-  let v = phone.value.replace(/\D/g, '');
-
-  if (v.startsWith('8')) v = '7' + v.slice(1);
-  if (!v.startsWith('7')) v = '7' + v;
-
-  let res = '+7';
-
-  if (v.length > 1) res += ' (' + v.slice(1, 4);
-  if (v.length >= 5) res += ') ' + v.slice(4, 7);
-  if (v.length >= 8) res += '-' + v.slice(7, 9);
-  if (v.length >= 10) res += '-' + v.slice(9, 11);
-
-  phone.value = res;
-});
-
 
 
     function stableHash(str){
@@ -268,28 +166,11 @@ phone.addEventListener('input', () => {
         'fm.designprosmot@mail.ru':'Finance Manager',
         'hr.designprosmot@mail.ru':'HR'
       },
-      socials: ['Instagram','ВКонтакте']
+      socials: ['Telegram', 'Instagram','ВКонтакте']
     };
 
-    function fillSelect(sel, values){
-      if (!sel) return;
-      var html = [];
-      for (var i=0;i<values.length;i++){
-        var v = values[i];
-        html.push('<option value="' + v + '">' + v + '</option>');
-      }
-      sel.innerHTML = html.join('');
-    }
-
+    
    
-    fillSelect(mEmail, OPT.emails);
-
-    function syncEmailMeaning(){
-      var em = (mEmail && mEmail.value) ? mEmail.value : '';
-      var meaning = (OPT.emailMeaning && OPT.emailMeaning[em]) ? OPT.emailMeaning[em] : '';
-      if (mEmailMeaning) mEmailMeaning.value = meaning || '';
-    }
-    if (mEmail) mEmail.addEventListener('change', syncEmailMeaning);
 
     function inferDeptByRole(role){
       var r = (role || '').toLowerCase();
@@ -411,7 +292,7 @@ phone.addEventListener('input', () => {
 
       if (typeof e.meta.inTeam !== 'boolean'){
         e.meta.inTeam = seededRand(seed + 121) > 0.08;
-      }
+      } //фикс из-за смены названий
 
       if (!e.meta.hireDate){
         var nm = (e.name || '').toLowerCase();
@@ -462,7 +343,7 @@ phone.addEventListener('input', () => {
     var selectedEmpIds = new Set();
 
     var state = { plan:Object.create(null), fact:Object.create(null) };
-    var editingId = null;
+    
 
     function keyOf(d){ return d.getFullYear() + '-' + pad2(d.getMonth()+1) + '-' + pad2(d.getDate()); }
     function ruDate(d){ return pad2(d.getDate()) + '.' + pad2(d.getMonth()+1) + '.' + d.getFullYear(); }
@@ -644,75 +525,94 @@ phone.addEventListener('input', () => {
     function ensureMonthData(date){
       var mr = monthRange(date);
       var days = daysInRange(mr.start, mr.end);
-
-      var FACT_CUTOFF = new Date(2026, 0, 15);
-      FACT_CUTOFF.setHours(0,0,0,0);
-
+    
+      // Важно: TODAY уже есть в твоём коде
+      var today = startOfToday();
+    
+      function dowRuShort(d){
+        // DAY_ORDER: ['Пн','Вт','Ср','Чт','Пт','Сб','Вс']
+        // JS: 0=Вс,1=Пн,...,6=Сб
+        var js = d.getDay();
+        return js === 0 ? 'Вс' : DAY_ORDER[js - 1];
+      }
+    
+      function parseHMToMinutes(s){
+        if (!s || typeof s !== 'string') return null;
+        var parts = s.split(':');
+        if (parts.length < 2) return null;
+        var h = Number(parts[0]);
+        var m = Number(parts[1]);
+        if (!Number.isFinite(h) || !Number.isFinite(m)) return null;
+        return h * 60 + m;
+      }
+    
+      function minutesFromSchedule(emp){
+        // 1) если есть hours вида "8:00" -> 480
+        var hm = parseHMToMinutes(emp.hours);
+        if (hm != null) return hm;
+    
+        // 2) иначе считаем from/to
+        var from = parseHMToMinutes(emp.from);
+        var to = parseHMToMinutes(emp.to);
+        if (from == null || to == null) return null;
+    
+        var diff = to - from;
+        if (diff < 0) diff += 24 * 60;
+        return diff;
+      }
+    
+      function isWorkingDayForEmp(emp, d){
+        var ru = dowRuShort(d); // 'Пн'...'Вс'
+        return !!(emp.days && emp.days.indexOf(ru) >= 0);
+      }
+    
       for (var di=0; di<days.length; di++){
         var d = days[di];
         var k = keyOf(d);
+    
         if (!state.plan[k]) state.plan[k] = Object.create(null);
         if (!state.fact[k]) state.fact[k] = Object.create(null);
-
-        var afterCutoff = d > FACT_CUTOFF;
-
+    
+        var isPast = d < today;
+    
         for (var ei=0; ei<employees.length; ei++){
           var e = employees[ei];
-          var weekend = isWeekend(d);
-
-          var pType = weekend ? 'off' : 'work';
-          var pMin = weekend ? null : 8*60;
-
-          var dayN = d.getDate();
-          if (!weekend){
-            if ((e.id==='iod' && dayN>=9 && dayN<=13) || (e.id==='sha' && dayN>=16 && dayN<=18) || (e.id==='pri' && dayN>=23 && dayN<=24)){
-              pType='vac'; pMin=null;
-            }
-            if (e.id==='zdr' && dayN===6){ pType='paid_off'; pMin=null; }
-            if (e.id==='vol' && dayN===20){ pType='unpaid_off'; pMin=null; }
-            if (e.id==='rub' && dayN===11){ pType='special'; pMin=6*60; }
-          }
-
-          state.plan[k][e.id] = { type:pType, minutes:pMin };
-
-          if (afterCutoff){
-            delete state.fact[k][e.id];
-            continue;
-          }
-
-          var fType = pType;
-          var fMin = pMin;
-          var seed = Number(String(d.getFullYear()) + pad2(d.getMonth()+1) + pad2(d.getDate())) + ei*97;
-          var r = seededRand(seed);
-
-          if (pType==='work' || pType==='special'){
-            if (r < 0.02){
-              fType='sick'; fMin=null;
+    
+          // ---- PLAN: только если ещё нет записи ----
+          if (!state.plan[k][e.id]){
+            var work = isWorkingDayForEmp(e, d);
+    
+            if (!work){
+              state.plan[k][e.id] = { type:'off', minutes:null };
             } else {
-              var base = (pType==='special') ? 6*60 : 8*60;
-              var jitter = Math.round((seededRand(seed+17)-0.5)*180);
-              fMin = clamp(base + jitter, 3*60, 14*60);
-              fType='work';
-              if (seededRand(seed+99) > 0.992) fMin = clamp(base + 8*60, 0, 18*60);
-              if (seededRand(seed+7) < 0.015) { fMin=null; fType='work'; }
+              var mins = minutesFromSchedule(e);
+              // если совсем не можем посчитать — ставим 8ч как безопасный дефолт
+              if (mins == null) mins = 8 * 60;
+              state.plan[k][e.id] = { type:'work', minutes:mins };
             }
-          } else {
-            if (pType==='off' && seededRand(seed+33) > 0.94){
-              fType='work';
-              fMin = clamp(2*60 + Math.round(seededRand(seed+55)*6*60), 60, 9*60);
+          }
+    
+          // ---- FACT: НЕ РАНДОМ, только “заполнить пустоту” в прошлом ----
+          // Чтобы таблица не показывала "неявка" просто из-за отсутствия факта.
+          // Если факт уже есть (введён вручную) — НЕ ТРОГАЕМ.
+          if (isPast && !state.fact[k][e.id]){
+            var p = state.plan[k][e.id];
+            if (!p){
+              // на всякий
+              state.fact[k][e.id] = { type:'off', minutes:null };
+            } else if (p.type === 'work' || p.type === 'special'){
+              state.fact[k][e.id] = { type:'work', minutes:(p.minutes != null ? p.minutes : 0) };
             } else {
-              fMin=null;
+              state.fact[k][e.id] = { type:p.type, minutes:null };
             }
           }
-
-          if (pType==='vac' || pType==='paid_off' || pType==='unpaid_off'){
-            fType=pType; fMin=null;
-          }
-
-          state.fact[k][e.id] = { type:fType, minutes:fMin };
+    
+          // В будущем факт лучше оставлять пустым (пусть будет "—")
+          // Ничего не делаем.
         }
       }
     }
+    
 
     function getPlanCell(empId, dateKey){
       var p = state.plan[dateKey] && state.plan[dateKey][empId];
@@ -857,98 +757,6 @@ phone.addEventListener('input', () => {
       for (var i=0;i<btns.length;i++) btns[i].classList.toggle('active', btns[i].dataset.empview === employeesView);
     }
 
-    function renderTable(){
-      var days = getPeriodDays().slice();
-      if (timeOrder === 'desc') days.reverse();
-      var isDev = (mode === 'dev');
-      var html = [];
-
-      html.push('<div class="table-wrap"><table>');
-      html.push('<colgroup><col class="col-date">');
-      for (var i=0;i<employees.length;i++) html.push('<col class="col-emp">');
-      html.push('</colgroup>');
-
-      html.push('<thead><tr>');
-      html.push('<th class="sticky">Дата</th>');
-      for (var ei=0; ei<employees.length; ei++){
-        var e = employees[ei];
-        var out = (!allSelected && selectedEmpIds.size>0 && !selectedEmpIds.has(e.id));
-        html.push('<th class="' + (out ? 'filtered-out' : '') + '"><div class="head-name">' + e.name + '<span>' + e.role + '</span></div></th>');
-      }
-      html.push('</tr></thead>');
-
-      html.push('<tbody>');
-      for (var di=0; di<days.length; di++){
-        var d = days[di];
-        var k = keyOf(d);
-        html.push('<tr>');
-        html.push('<td class="sticky"><div>' + ruDate(d) + '</div><div class="date">' + dowRu(d) + '</div></td>');
-
-        for (var ej=0; ej<employees.length; ej++){
-          var emp = employees[ej];
-          var hide = (!allSelected && selectedEmpIds.size>0 && !selectedEmpIds.has(emp.id));
-          var outCls = hide ? 'filtered-out' : '';
-
-          if (!isDev){
-            var cell;
-            if (mode === 'fact') cell = getFactCell(emp.id, k);
-            else if (mode === 'plan') cell = getPlanCell(emp.id, k);
-            else if (mode === 'mix') cell = getMixCell(emp.id, k);
-            else cell = { text:'—', type:'none', minutes:null };
-
-            var planMuted = false;
-            if (mode === 'plan'){
-              planMuted = true;
-            } else if (mode === 'mix'){
-              var fMix = state.fact[k] && state.fact[k][emp.id];
-              if (!isNoShow(emp.id, k) && !hasFactFilled(fMix)) planMuted = true;
-            }
-
-            var hl = '';
-            if (highlightOn && view === 'table' && (mode === 'fact' || mode === 'mix')){
-              var p0 = state.plan[k] && state.plan[k][emp.id];
-              var plannedWork = p0 && (p0.type==='work' || p0.type==='special') && p0.minutes != null;
-              if (plannedWork){
-                if (cell.type === 'no_show'){
-                  hl = 'hl-bad';
-                } else if (cell.type === 'no_fact'){
-                  hl = 'hl-gray';
-                } else if (cell.type === 'work' && cell.minutes != null){
-                  var devMin = cell.minutes - p0.minutes;
-                  var a = Math.abs(devMin);
-                  if (a > 240) hl = 'hl-bad';
-                  else if (a > 120) hl = 'hl-warn';
-                }
-              }
-            }
-
-            html.push('<td class="t ' + outCls + (planMuted ? ' plan-gray' : '') + (hl ? (' ' + hl) : '') + '">' + cell.text + '</td>');
-          } else {
-            var dv = getDevCell(emp.id, k);
-            var devClass = 'devNA';
-            if (dv.devMinutes != null){
-              if (dv.devMinutes > 0) devClass = 'devPos';
-              else if (dv.devMinutes < 0) devClass = 'devNeg';
-              else devClass = 'devZero';
-            }
-
-            html.push(
-              '<td class="t ' + outCls + '">' +
-                '<div class="devCell">' +
-                  '<span class="devPlan">' + dv.planText + '</span>' +
-                  '<span class="' + devClass + '">' + dv.devText + '</span>' +
-                '</div>' +
-              '</td>'
-            );
-          }
-        }
-
-        html.push('</tr>');
-      }
-      html.push('</tbody></table></div>');
-
-      contentEl.innerHTML = html.join('');
-    }
 
     function dotClassForStatus(type){
       if (type === 'off' || type == null) return null;
@@ -962,210 +770,31 @@ phone.addEventListener('input', () => {
       return null;
     }
 
-    function renderCalendar(){
-      var mr = monthRange(cursor);
-      var start = mr.start;
-      var end = mr.end;
-
-      var first = new Date(start);
-      var js = first.getDay();
-      var offset = (js === 0) ? 6 : js-1;
-      first.setDate(first.getDate() - offset);
-
-      var last = new Date(end);
-      var js2 = last.getDay();
-      var offset2 = (js2 === 0) ? 0 : 7-js2;
-      last.setDate(last.getDate() + offset2);
-
-      var baseDays = daysInRange(first, last);
-      var weeksCount = Math.floor(baseDays.length / 7);
-      var empList = getFilteredEmployees();
-
-      var html = [];
-      html.push('<div class="cal-grid">');
-      html.push('<div class="dow">');
-      var dows = ['Пн','Вт','Ср','Чт','Пт','Сб','Вс'];
-      for (var i=0;i<dows.length;i++) html.push('<div>' + dows[i] + '</div>');
-      html.push('</div>');
-
-      html.push('<div class="days">');
-      for (var di=0; di<baseDays.length; di++){
-        var idx = di;
-        if (timeOrder === 'desc'){
-          var w = Math.floor(di / 7);
-          var j = di % 7;
-          idx = (weeksCount - 1 - w) * 7 + j;
-        }
-
-        var d = baseDays[idx];
-        var k = keyOf(d);
-
-        var dayStart = new Date(d); dayStart.setHours(0,0,0,0);
-        var isPast = dayStart < TODAY;
-
-        html.push('<div class="day">');
-        html.push('<div class="num">' + d.getDate() + '</div>');
-        html.push('<div class="dots">');
-
-        for (var ei=0; ei<empList.length; ei++){
-          var emp = empList[ei];
-          var p = state.plan[k] && state.plan[k][emp.id];
-          var f = state.fact[k] && state.fact[k][emp.id];
-
-          var source = mode;
-          if (mode === 'dev') source = 'fact';
-          if (mode === 'mix'){
-            var factFilled = hasFactFilled(f);
-            if (isPast) source = (isNoShow(emp.id, k) || factFilled) ? 'fact' : 'plan';
-            else source = 'plan';
-          }
-
-          var st = null;
-          var minutes = null;
-          var muted = false;
-
-          if (source === 'fact'){
-            if (isNoShow(emp.id, k)){
-              st = 'no_show';
-            } else if (isNoFact(emp.id, k)){
-              st = 'no_fact';
-            } else if (f){
-              st = f.type;
-              if (showWorkTime && f.type === 'work' && f.minutes != null) minutes = f.minutes;
-            }
-          } else {
-            if (p){
-              st = p.type;
-              muted = true;
-            }
-          }
-
-          var clsDot = dotClassForStatus(st);
-          if (!clsDot) continue;
-
-          var parts = emp.name.split(' ');
-          var initials = ((parts[0] && parts[0][0]) ? parts[0][0] : '') + ((parts[1] && parts[1][0]) ? parts[1][0] : '');
-          initials = initials.toUpperCase();
-
-          var planCls = muted ? ' dot-plan' : '';
-
-          var timeCls = '';
-          if (highlightOn && (mode === 'fact' || mode === 'mix') && source === 'fact' && minutes != null){
-            var plannedWork = p && (p.type==='work' || p.type==='special') && p.minutes != null;
-            if (plannedWork){
-              var devMin = minutes - p.minutes;
-              var a = Math.abs(devMin);
-              if (a > 240) timeCls = ' hl-bad';
-              else if (a > 120) timeCls = ' hl-warn';
-            }
-          }
-
-          if (minutes != null){
-            html.push(
-              '<span class="dot ' + clsDot + planCls + ' wide" title="' + emp.name + '">' +
-                initials + '<span class="time' + timeCls + '">' + fmtHM(minutes) + '</span>' +
-              '</span>'
-            );
-          } else {
-            html.push('<span class="dot ' + clsDot + planCls + '" title="' + emp.name + '">' + initials + '</span>');
-          }
-        }
-
-        html.push('</div>');
-        html.push('</div>');
-      }
-      html.push('</div></div>');
-
-      contentEl.innerHTML = html.join('');
-    }
+    
 
     function renderEmployees(){
-      if (employeesView === 'table') renderEmployeesTable();
-      else renderEmployeesCards();
-    }
-
-    function renderEmployeesCards(){
-      var html = [];
-      html.push('<div class="emp-grid" id="empGrid">');
-
-      for (var i=0;i<employees.length;i++){
-        var e = employees[i];
-        ensureEmployeeMeta(e);
-
-        var days = formatWorkDays(e.days);
-        var hours = (e.hours || '—').replace(':00','') + ' часов';
-        var range = (e.from && e.to) ? ('с ' + e.from + ' до ' + e.to) : 'с N/A до N/A';
-        var tg = e.tg ? ('tg: ' + e.tg) : 'tg: —';
-
-        var meta = (e.meta.project || '—') + ' • ' + (e.meta.department || '—');
-
-        html.push(
-          '<div class="emp-card" data-emp="' + e.id + '">' +
-            '<div class="name">' + e.name + '</div>' +
-            '<div class="role">' + e.role + '</div>' +
-            '<div class="meta">' + meta + '</div>' +
-            '<div class="days">' + days + '</div>' +
-            '<div class="hours">' +
-              '<div class="h">' + hours + '</div>' +
-              '<div class="r">' + range + '</div>' +
-            '</div>' +
-            '<div class="tg"><span class="linkdot">⛓</span><span>' + tg + '</span></div>' +
-          '</div>'
-        );
-      }
-
-      html.push(
-        '<div class="emp-add" data-add="1">' +
-          '<div class="plus">+</div>' +
-          '<div>Добавить сотрудника</div>' +
-        '</div>'
-      );
-
-      html.push('</div>');
-      contentEl.innerHTML = html.join('');
-    }
-
-    function renderEmployeesTable(){
-      const tpl = document.getElementById('tpl-employees-table');
-    
-      contentEl.innerHTML = '';
-      const root = tpl.content.firstElementChild.cloneNode(true);
-      contentEl.appendChild(root);
-    
-      const body = root.querySelector('[data-emp-table-body]');
-    
-      const rows = [];
-    
-      for (let i = 0; i < employees.length; i++) {
-        const e = employees[i];
-        ensureEmployeeMeta(e);
-    
-        const days = formatWorkDays(e.days);
-        const hours = (e.hours || '—');
-        const range = (e.from && e.to) ? (e.from + '–' + e.to) : '—';
-        const tg = e.tg ? e.tg : '—';
-    
-        rows.push(`
-          <div class="row item" data-emp="${e.id}">
-            <div class="cell">${e.name}</div>
-            <div class="cell mut">${e.role}</div>
-            
-            <div class="cell num">${days}</div>
-            <div class="cell num">${hours}</div>
-            <div class="cell num">${range}</div>
-            <div class="cell">${tg}</div>
-            <div class="cell subtle">${e.meta.email || '—'}</div>
-            <div class="cell subtle">${e.meta.phone || '—'}</div>
-            <div class="cell subtle">${(e.meta.socials||[]).join(', ') || '—'}</div>
-            <div class="cell subtle">${e.meta.hireDate || '—'}</div>
-            <div class="cell subtle">${e.meta.inTeam ? 'В штате' : 'Уволен'}</div>
-            <div class="cell subtle">${e.meta.emailMeaning || '—'}</div>
-          </div>
-        `);
+      try{
+        if (window.EmployeesView && typeof window.EmployeesView.render === 'function'){
+          window.EmployeesView.render({
+            employees: employees,
+            ensureEmployeeMeta: ensureEmployeeMeta,
+            formatWorkDays: formatWorkDays,
+            employeesView: employeesView,
+            contentEl: contentEl
+          });
+          return;
+        }
+      }catch(e){
+        showErr(e && e.message ? e.message : e);
       }
     
-      body.innerHTML = rows.join('');
+      contentEl.innerHTML =
+        '<div class="card"><h3>Сотрудники</h3>' +
+        '<div style="font-size:12px;color:var(--mut);line-height:1.6;font-weight:900;">' +
+        'Не найден скрипт сотрудников (scripts/employees-view.js).' +
+        '</div></div>';
     }
+    
 
 
 
@@ -1196,189 +825,16 @@ function renderTeamContacts(){
     // ...
     
 
-    function renderAnalytics(){
-      var days = getPeriodDays().slice();
-      if (timeOrder === 'desc') days.reverse();
-      var filtered = getFilteredEmployees();
-      var empMode = (allSelected || selectedEmpIds.size===0) ? 'all' : (selectedEmpIds.size===1 ? 'one' : 'many');
-      var oneId = (empMode==='one') ? Array.from(selectedEmpIds)[0] : null;
+   
+    
 
-      var series = [];
-      for (var di=0; di<days.length; di++){
-        var d = days[di];
-        var k = keyOf(d);
-        var plan=0, fact=0, mix=0;
+    
 
-        if (empMode==='all' || empMode==='many'){
-          var list = (empMode==='all') ? employees : filtered;
-          for (var ei=0; ei<list.length; ei++){
-            var emp = list[ei];
-            var p = state.plan[k] && state.plan[k][emp.id];
-            var f = state.fact[k] && state.fact[k][emp.id];
+    
 
-            if (p && (p.type==='work' || p.type==='special') && p.minutes != null) plan += p.minutes;
-            if (f && f.type==='work' && f.minutes != null) fact += f.minutes;
+    
 
-            if (isNoShow(emp.id, k)){
-            } else if (hasFactFilled(f)){
-              if (f && f.type==='work' && f.minutes != null) mix += f.minutes;
-            } else {
-              if (p && (p.type==='work' || p.type==='special') && p.minutes != null) mix += p.minutes;
-            }
-          }
-        } else {
-          var p1 = state.plan[k] && state.plan[k][oneId];
-          var f1 = state.fact[k] && state.fact[k][oneId];
-
-          if (p1 && (p1.type==='work' || p1.type==='special') && p1.minutes != null) plan = p1.minutes;
-          if (f1 && f1.type==='work' && f1.minutes != null) fact = f1.minutes;
-
-          if (isNoShow(oneId, k)){
-            mix = 0;
-          } else if (hasFactFilled(f1)){
-            mix = (f1 && f1.type==='work' && f1.minutes != null) ? f1.minutes : 0;
-          } else {
-            mix = (p1 && (p1.type==='work' || p1.type==='special') && p1.minutes != null) ? p1.minutes : 0;
-          }
-        }
-
-        series.push({ d:d, plan:plan, fact:fact, mix:mix, dev:(fact-plan) });
-      }
-
-      var max = 1;
-      for (var i=0;i<series.length;i++){
-        var v = (mode==='plan') ? series[i].plan : (mode==='fact') ? series[i].fact : (mode==='mix') ? series[i].mix : Math.abs(series[i].dev);
-        if (v > max) max = v;
-      }
-
-      var totalPlan=0, totalFact=0, totalMix=0;
-      for (var j=0;j<series.length;j++){ totalPlan += series[j].plan; totalFact += series[j].fact; totalMix += series[j].mix; }
-
-      var label = 'Все';
-      if (!(allSelected || selectedEmpIds.size===0)){
-        if (selectedEmpIds.size===1){
-          var id = Array.from(selectedEmpIds)[0];
-          for (var z=0;z<employees.length;z++) if (employees[z].id===id) label = employees[z].name;
-        } else {
-          label = filtered.length + ' человек';
-        }
-      }
-
-      var html = [];
-      html.push('<div class="grid2">');
-      html.push('<div class="card">');
-      html.push('<h3>' + label + ' • часы по дням</h3>');
-      html.push('<div class="bars">');
-      for (var bi=0; bi<series.length; bi++){
-        var s = series[bi];
-        var val = (mode==='plan') ? s.plan : (mode==='fact') ? s.fact : (mode==='mix') ? s.mix : Math.abs(s.dev);
-        var h = Math.round((val/max)*100);
-        var tip = (mode==='dev') ? fmtDev(s.dev) : fmtHM(val);
-        html.push('<div class="bar" title="' + ruDate(s.d) + ' • ' + tip + '"><div class="fill" style="height:' + h + '%;"></div></div>');
-      }
-      html.push('</div>');
-
-      html.push('<div class="kpi">');
-      html.push('<div class="box"><span>План</span><b>' + fmtHM(totalPlan) + '</b></div>');
-      html.push('<div class="box"><span>Факт</span><b>' + fmtHM(totalFact) + '</b></div>');
-      html.push('<div class="box"><span>План/факт</span><b>' + fmtHM(totalMix) + '</b></div>');
-      html.push('</div>');
-
-      html.push('</div>');
-      html.push('<div class="card">');
-      html.push('<h3>Правила (демо)</h3>');
-      html.push('<div style="font-size:12px; color:var(--mut); line-height:1.6; font-weight:900;">');
-      html.push('<div>• В календаре не показываем обычный выходной.</div>');
-      html.push('<div>• Красный кружок = выходной за свой счёт.</div>');
-      html.push('<div>• Розовый кружок = согласованный/оплачиваемый выходной.</div>');
-      html.push('<div>• Ярко-красный кружок = неявка.</div>');
-      html.push('<div>• Серый кружок = нет факта (только прошедшие дни).</div>');
-      html.push('<div>• В будущих днях вместо факта — прочерк (без статуса).</div>');
-      html.push('</div>');
-      html.push('</div>');
-      html.push('</div>');
-
-      contentEl.innerHTML = html.join('');
-    }
-
-    function setLinkButtons(yes){
-      mLinkYes.classList.toggle('active', !!yes);
-      mLinkNo.classList.toggle('active', !yes);
-    }
-
-    function setInTeamButtons(yes){
-      mInTeamYes.classList.toggle('active', !!yes);
-      mInTeamNo.classList.toggle('active', !yes);
-    }
-
-    // Кнопки дней/соцсетей теперь лежат в HTML (index.html),
-    // поэтому не генерируем их через JS. Здесь оставляем только синхронизацию состояний.
-    function setButtonsOn(container, attrName, values){
-      if (!container) return;
-
-      // сбросить
-      var all = container.querySelectorAll('.daybtn');
-      for (var i=0;i<all.length;i++) all[i].classList.remove('on');
-
-      if (!values || !values.length) return;
-
-      // выставить
-      for (var j=0;j<values.length;j++){
-        var v = values[j];
-        var btn = container.querySelector('.daybtn[' + attrName + '="' + v + '"]');
-        if (btn) btn.classList.add('on');
-      }
-    }
-
-    function openModal(empId){
-      editingId = empId;
-
-      // Кнопка «Удалить» нужна только при редактировании существующего сотрудника
-      if (mDelet) mDelet.style.display = (empId === '__new') ? 'none' : '';
-
-      // Модалка полностью в HTML — здесь только сбрасываем/проставляем выбранные значения
-      setButtonsOn(mDays, 'data-day', []);
-      setButtonsOn(mSocials, 'data-social', []);
-
-      var emp = null;
-      for (var i=0;i<employees.length;i++) if (employees[i].id===empId) emp = employees[i];
-
-      if (!emp){
-        // Fallback: прячем кнопку, если сотрудник не найден
-        if (mDelet) mDelet.style.display = 'none';
-
-        mFirst.value=''; mLast.value=''; mRole.value='';
-        mFrom.value=''; mTo.value=''; mHours.value=''; mTg.value='';
-        setLinkButtons(true);
-
-        empModal.hidden = false;
-        return;
-      }
-
-      ensureEmployeeMeta(emp);
-
-      var parts = emp.name.split(' ');
-      mFirst.value = parts[0] || '';
-      mLast.value = parts.slice(1).join(' ') || '';
-      mRole.value = emp.role || '';
-      mFrom.value = emp.from || '';
-      mTo.value = emp.to || '';
-      mHours.value = emp.hours || '';
-      mTg.value = emp.tg || '';
-      setLinkButtons(!!emp.tgLinked);
-
-      // дни/соцсети
-      setButtonsOn(mDays, 'data-day', emp.days || []);
-      setButtonsOn(mSocials, 'data-social', (emp.meta && emp.meta.socials) ? emp.meta.socials : []);
-     
-
-      empModal.hidden = false;
-    }
-
-    function closeModal(){
-      empModal.hidden = true;
-      editingId = null;
-    }
+   
 
     // ============================
     // Производственный календарь (вынесен в scripts/prod-calendar.js)
@@ -1460,23 +916,91 @@ function render(){
       if (view === 'table'){
         viewTitleEl.textContent = 'Таблица';
         viewHintEl.textContent = monthLabel + ' • ' + who + ' • ' + modeLabel;
-        renderTable();
+      
+        window.TimeTable.render({
+          contentEl,
+          employees,
+          state,
+          getPeriodDays,
+          keyOf,
+          ruDate,
+          dowRu,
+          getPlanCell,
+          getFactCell,
+          getMixCell,
+          mode,
+          timeOrder,
+          allSelected,
+          selectedEmpIds,
+          highlightOn,
+          view
+        });
+      
         return;
       }
+      
 
       if (view === 'calendar'){
         viewTitleEl.textContent = 'Календарь';
         viewHintEl.textContent = monthLabel + ' • ' + who + ' • ' + modeLabel;
-        renderCalendar();
+      
+        window.TimeCalendar.render({
+          contentEl,
+          employees,
+          state,
+          cursor,
+          TODAY,
+          mode,
+          timeOrder,
+          showWorkTime,
+          highlightOn,
+          getFilteredEmployees,
+          monthRange,
+          daysInRange,
+          keyOf,
+          hasFactFilled,
+          isNoShow,
+          isNoFact,
+          dotClassForStatus,
+          fmtHM
+        });
+      
         return;
       }
+      
 
       if (view === 'analytics'){
         viewTitleEl.textContent = 'Аналитика';
         viewHintEl.textContent = monthLabel + ' • ' + who + ' • ' + modeLabel;
-        renderAnalytics();
+      
+        if (window.TimeAnalytics && typeof window.TimeAnalytics.render === 'function'){
+          window.TimeAnalytics.render({
+            contentEl: contentEl,
+            employees: employees,
+            state: state,
+            mode: mode,
+            timeOrder: timeOrder,
+          
+            allSelected: allSelected,
+            selectedEmpIds: selectedEmpIds,
+          
+            getFilteredEmployees: getFilteredEmployees,
+            getPeriodDays: getPeriodDays,
+            keyOf: keyOf,
+            ruDate: ruDate,
+            fmtHM: fmtHM,
+            fmtDev: fmtDev,
+            hasFactFilled: hasFactFilled,
+            isNoShow: isNoShow
+          });          
+        } else {
+          // временная страховка (можно убрать позже)
+          // renderAnalytics();
+          contentEl.innerHTML = '<div class="card"><h3>Аналитика</h3><div style="font-size:12px;color:var(--mut);line-height:1.6;font-weight:900;">Не найден скрипт аналитики (scripts/time-analytics.js).</div></div>';
+        }
         return;
       }
+      
 
       if (view === 'employees'){
         viewTitleEl.textContent = 'Условия';
@@ -1605,9 +1129,13 @@ function render(){
         render();
       });
 
-      empMSBtn.addEventListener('click', function(){ setEmpMSOpen(!empMS.classList.contains('open')); });
+      empMSBtn.addEventListener('click', function(ev){
+        ev.stopPropagation();
+        setEmpMSOpen(!empMS.classList.contains('open'));
+      });
 
       empMSPop.addEventListener('click', function(ev){
+        ev.stopPropagation();
         var item = ev.target.closest('.ms-item');
         if (!item) return;
         var id = item.getAttribute('data-id');
@@ -1634,7 +1162,7 @@ function render(){
       document.addEventListener('keydown', function(e){
         if (e.key === 'Escape'){
           setEmpMSOpen(false);
-          if (!empModal.hidden) closeModal();
+          if (window.EmployeesModal && window.EmployeesModal.isOpen()) window.EmployeesModal.close();
         }
         if (!(e.metaKey || e.ctrlKey)) return;
         if (e.key === '1'){ view='calendar'; render(); }
@@ -1645,204 +1173,36 @@ function render(){
       contentEl.addEventListener('click', function(e){
         var card = e.target.closest('.emp-card');
         if (card && view === 'employees'){
-          openModal(card.getAttribute('data-emp'));
+          window.EmployeesModal.open(card.getAttribute('data-emp'));
           return;
         }
         var add = e.target.closest('.emp-add');
         if (add && view === 'employees'){
-          openModal('__new');
+          window.EmployeesModal.open('__new');
           return;
         }
 
         var row = e.target.closest('.emp-table .row.item');
         if (row && view === 'employees'){
-          openModal(row.getAttribute('data-emp'));
+          window.EmployeesModal.open(row.getAttribute('data-emp'));
           return;
         }
         var addRow = e.target.closest('.emp-table .row.add');
         if (addRow && view === 'employees'){
-          openModal('__new');
+          window.EmployeesModal.open('__new');
           return;
         }
       });
 
-      empModal.addEventListener('click', function(e){
-        if (e.target && e.target.getAttribute && e.target.getAttribute('data-close') === '1') closeModal();
-      });
+      
 
-      mCancel.addEventListener('click', closeModal);
-
-      // Работаем с кнопкой "Удалить", только если она существует в DOM
-      if (mDelet){
-
-        // Вешаем обработчик клика на кнопку удаления
-        mDelet.addEventListener('click', function(){
-
-          // Защита: удалять можно только существующего сотрудника
-          // (не удаляем при создании нового или если id отсутствует)
-          if (!editingId || editingId === '__new') return;
-
-          // Сохраняем id текущего редактируемого сотрудника
-          var empId = editingId;
-
-          // Ищем сотрудника в массиве employees по id
-          // Нужно, чтобы показать его имя в confirm
-          var emp = null;
-          for (var i=0;i<employees.length;i++)
-            if (employees[i].id === empId) emp = employees[i];
-
-          // Берём имя сотрудника для текста подтверждения
-          // Если вдруг не найден — показываем id
-          var name = emp ? emp.name : empId;
-
-          // Показываем confirm и прерываем выполнение,
-          // если пользователь нажал "Отмена"
-          if (!confirm('Удалить сотрудника «' + name + '»?')) return;
-
-          // 1) Удаляем сотрудника из основного массива employees
-          // Идём с конца, чтобы безопасно удалять элементы
-          for (var j=employees.length-1; j>=0; j--){
-            if (employees[j].id === empId) employees.splice(j, 1);
-          }
-
-          // 2) Удаляем сотрудника из выбранных в мультиселекте,
-          // если сейчас выбран не режим "Все"
-          if (!allSelected){
-            selectedEmpIds.delete(empId);
-
-            // Если после удаления список выбранных пуст —
-            // автоматически возвращаем режим "Все"
-            if (selectedEmpIds.size === 0) allSelected = true;
-          }
-
-          // 3) Сбрасываем кэш план/факт,
-          // так как он рассчитывается на основе employees
-          state.plan = Object.create(null);
-          state.fact = Object.create(null);
-
-          // Закрываем модальное окно
-          closeModal();
-
-          // Перерисовываем список сотрудников
-          renderEmployeeMS();
-
-          // Полная перерисовка интерфейса (таблица / календарь / итоги)
-          render();
-        });
-      }
-
-
-      mDays.addEventListener('click', function(e){
-        var b = e.target.closest('.daybtn');
-        if (!b) return;
-        b.classList.toggle('on');
-      });
-
-      mLinkYes.addEventListener('click', function(){ setLinkButtons(true); });
-      mLinkNo.addEventListener('click', function(){ setLinkButtons(false); });
-      mInTeamYes.addEventListener('click', function(){ setInTeamButtons(true); });
-      mInTeamNo.addEventListener('click', function(){ setInTeamButtons(false); });
-
-      mSocials.addEventListener('click', function(e){
-        var b = e.target.closest('.daybtn[data-social]');
-        if (!b) return;
-        b.classList.toggle('on');
-      });
-
-      mSave.addEventListener('click', function(){
-          
-        mLast.classList.toggle('invalid', !mLast.value.trim());
-
-        if (!mLast.value.trim()) {
-          mLast.focus();
-          return;
-        }
+      
 
 
 
-        var first = (mFirst.value || '').trim();
-        var last = (mLast.value || '').trim();
-        var full = (first + ' ' + last).trim();
+    
 
-        var daySet = [];
-        var btns = mDays.querySelectorAll('.daybtn.on');
-        for (var i=0;i<btns.length;i++) daySet.push(btns[i].dataset.day);
-
-        var yes = mLinkYes.classList.contains('active');
-
-        function collectMeta(){
-          function v(el){
-            if (!el) return undefined; // поля нет в DOM — не трогаем
-            return (el.value || '').trim();
-          }
-
-          var socials = [];
-          if (mSocials){
-            var sBtns = mSocials.querySelectorAll('.daybtn.on[data-social]');
-            for (var i=0;i<sBtns.length;i++) socials.push(sBtns[i].getAttribute('data-social'));
-          }
-
-          return {
-            // контакты
-            email: v(mEmail),
-            emailMeaning: v(mEmailMeaning),
-            phone: v(mPhone),
-
-            socials: socials,
-            inTeam: mInTeamYes ? mInTeamYes.classList.contains('active') : false,
-            hireDate: v(mHireDate)
-          };
-        }
-
-        if (editingId === '__new'){
-          var id = 'u' + Math.random().toString(16).slice(2,7);
-          employees.push({
-            id:id,
-            name: full || 'Новый сотрудник',
-            role:(mRole.value||'').trim() || '—',
-            days: daySet,
-            from:(mFrom.value||'').trim(),
-            to:(mTo.value||'').trim(),
-            hours:(mHours.value||'').trim(),
-            tg:(mTg.value||'').trim(),
-            tgLinked: yes,
-            meta: collectMeta()
-          });
-        } else {
-          for (var j=0;j<employees.length;j++){
-            if (employees[j].id !== editingId) continue;
-
-            employees[j].name = full || employees[j].name;
-            employees[j].role = (mRole.value||'').trim() || employees[j].role;
-            employees[j].days = daySet;
-            employees[j].from = (mFrom.value||'').trim();
-            employees[j].to = (mTo.value||'').trim();
-            employees[j].hours = (mHours.value||'').trim();
-            employees[j].tg = (mTg.value||'').trim();
-            employees[j].tgLinked = yes;
-
-            if (!employees[j].meta) employees[j].meta = Object.create(null);
-            var meta = collectMeta();
-
-            // Контакты (эти поля остаются)
-            if (meta.email !== undefined) employees[j].meta.email = meta.email;
-            if (meta.emailMeaning !== undefined) employees[j].meta.emailMeaning = meta.emailMeaning;
-            if (meta.phone !== undefined) employees[j].meta.phone = meta.phone;
-            employees[j].meta.socials = meta.socials;
-            employees[j].meta.inTeam = meta.inTeam;
-            if (meta.hireDate !== undefined) employees[j].meta.hireDate = meta.hireDate;
-
-            break;
-          }
-        }
-
-        state.plan = Object.create(null);
-        state.fact = Object.create(null);
-
-        closeModal();
-        renderEmployeeMS();
-        render();
-      });
+      
     }
 
     function assert(cond, msg){
@@ -1873,6 +1233,20 @@ function render(){
 
     function init(){
       bindEvents();
+      window.EmployeesModal.init({
+        showErr: showErr,
+        ensureEmployeeMeta: ensureEmployeeMeta,
+        renderEmployeeMS: renderEmployeeMS,
+        render: render,
+        OPT: OPT,
+      
+        getEmployees: function(){ return employees; },
+        getState: function(){ return state; },
+        getSelectedEmpIds: function(){ return selectedEmpIds; },
+      
+        getAllSelected: function(){ return allSelected; },
+        setAllSelected: function(v){ allSelected = !!v; }
+      });
       render();
       try{ runTests(); }
       catch(ex){

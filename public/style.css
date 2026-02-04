@@ -92,6 +92,8 @@
       justify-content:space-between;
       gap:12px;
       flex-wrap:wrap;
+      position: relative;
+      z-index: 100;
     }
     .title b{ font-size:14px; }
     .title .sub{ margin-top:2px; color:var(--mut); font-size:12px; font-weight:800; }
@@ -198,9 +200,21 @@
     .emp-add .plus{ width:44px; height:44px; border-radius:14px; border:2px dashed var(--br); display:flex; align-items:center; justify-content:center; font-size:20px; color:var(--mut); background:transparent; }
 
     .emp-table{ background:#fff; border:1px solid var(--br); border-radius:14px; overflow:auto; font-size:13px; color:var(--fg); }
-    .emp-table .row{ display:grid; grid-template-columns: 240px 140px 120px 120px 120px 140px 150px 120px 130px 140px 110px 90px 130px 120px 120px 140px 220px 150px 180px 110px 120px 140px; gap:12px; padding:14px 16px; align-items:center; border-bottom:1px solid var(--br);  }
+    .emp-table .row{
+      display:grid;
+  grid-template-columns: 240px 140px 140px 110px 120px 120px 190px 140px 200px 120px 110px 160px;
+  gap:12px;
+  padding:14px 16px;
+  align-items:center;
+  border-bottom:1px solid var(--br);
+
+  /* ✅ вот это главное */
+  width: max-content;
+  min-width: 100%;
+    }
+    
     .emp-table .row:last-child{ border-bottom:0; }
-    .emp-table .row.head{ background:#f9fafb; font-size:12px; color:var(--mut); font-weight:600; }
+    .emp-table .row.head{ background:#f9fafb; font-size:12px; color:var(--mut); font-weight:600; width: 100%; width: max-content; min-width: 100%;}
     .emp-table .row.item{ cursor:pointer; font-weight:450; }
     .emp-table .row.item .cell:first-child{ font-weight:650; font-size:14px; letter-spacing:.1px; }
     .emp-table .cell.mut{ color:var(--mut); font-weight:450; }
@@ -220,7 +234,7 @@
     .box span{ display:block; color:var(--mut); font-size:11px; font-weight:900; }
     .box b{ display:block; margin-top:4px; font-size:15px; font-weight:900; }
 
-    .err{ position:fixed; left:16px; bottom:16px; max-width:720px; padding:12px 14px; border-radius:14px; background:#fff; border:1px solid rgba(220,38,38,.35); box-shadow:var(--shadow); display:none; z-index:80; }
+    .err{ position:fixed; left:16px; bottom:16px; max-width:720px; padding:12px 14px; border-radius:14px; background:#fff; border:1px solid rgba(220,38,38,.35); box-shadow:var(--shadow); display:none; z-index:120; }
     .err code{ display:block; margin-top:6px; white-space:pre-wrap; font-size:12px; color:#b91c1c; }
 
     .modal[hidden]{ display:none; }
@@ -228,7 +242,7 @@
     .modal{
       position:fixed;
       inset:0;
-      z-index:90;
+      z-index:110;
       display:flex;
       align-items:center;
       justify-content:center;
